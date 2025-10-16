@@ -12,7 +12,7 @@ export default function Header() {
     const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setCompact(window.scrollY > 10)
+          setCompact(window.scrollY > 12)
           ticking = false
         })
         ticking = true
@@ -25,14 +25,12 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full   transition-all",
-        compact ? "py-2 bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60" : " py-4",
+        "sticky top-0 z-50 w-full bg-white transition-all",
+        compact ? "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2" : "py-4",
       )}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between ">
-        <div className="flex gap-20 items-center">
-
-        <Link href="/" className={cn("font-semibold text-balance tracking-tight", compact ? "text-lg" : "text-2xl")}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between transition-all">
+        <Link href="/" className={cn("font-semibold text-balance transition-all tracking-tight", compact ? "text-lg" : "text-2xl")}>
           <span className="text-primary">Real Goa</span> Holidays
         </Link>
         <nav className="hidden gap-6 md:flex">
@@ -46,7 +44,6 @@ export default function Header() {
             Contact
           </Link>
         </nav>
-        </div>
         <div className="flex items-center gap-2">
           <Link href="/contact">
             <Button variant="default" className="bg-primary text-primary-foreground hover:opacity-90">

@@ -33,20 +33,20 @@ export default function FeaturedDestinations() {
             transition={{ duration: 0.4, delay: i * 0.05 }}
              viewport={{ once: true }}
           >
-            <Card className="overflow-hidden bg-card shadow-sm">
+            <Card className="overflow-hidden bg-card shadow-sm pt-0 gap-4">
               <div className="relative h-48 w-full">
                 <Image
                   src={s.img || "/placeholder.svg"}
                   alt={s.title}
                   fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover h-full w-full"
+                  // sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
               <CardHeader>
-                <CardTitle className="text-xl">{s.title}</CardTitle>
+                <CardTitle className="text-xl m-0 p-0">{s.title}</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">{s.desc}</CardContent>
+              <CardContent className="m-0 text-sm text-muted-foreground">{s.desc}</CardContent>
             </Card>
           </motion.div>
         ))}
