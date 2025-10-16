@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 export default function Header() {
   const [compact, setCompact] = useState(false);
@@ -26,21 +35,21 @@ export default function Header() {
   return (
     <header
       className={cn(
-        " w-full z-50  transition-all",
+        "w-full z-50 transition-all",
         compact
-          ? "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2 top-3 max-w-7xl mx-auto px-10 rounded-xl sticky shadow-md"
-          : "py-4 sticky bg-[#ddf6fb] w-full top-0"
+          ? "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2 top-3 max-w-7xl mx-auto px-6 rounded-xl sticky shadow-md"
+          : "py-4 px-4 sticky bg-[#ddf6fb] w-full top-0"
       )}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between transition-all">
+        {/* --- Logo --- */}
         <div className="flex items-center gap-4">
-          <div className="relative h-16 w-16">
+          <div className="relative h-12 w-12 sm:h-16 sm:w-16">
             <Image
               src={"/images/logo.png"}
               alt={"logo"}
               fill
               className="object-cover h-full w-full"
-              // sizes="(max-width: 768px) 100vw, 33vw"
             />
           </div>
           <Link
@@ -50,36 +59,83 @@ export default function Header() {
               compact ? "text-lg" : "text-2xl"
             )}
           >
-            <span className="text-primary">Real Goa</span> {" "} Holidays
+            <span className="text-primary">Real Goa</span> Holidays
           </Link>
-          
         </div>
-        <nav className="hidden gap-6 md:flex">
-          <Link
-            className="hover:text-primary transition-colors"
-            href="/gallery"
-          >
+
+        {/* --- Desktop Nav --- */}
+        <nav className="hidden md:flex gap-6 items-center">
+          <Link className="hover:text-primary transition-colors" href="/gallery">
             Gallery
           </Link>
           <Link className="hover:text-primary transition-colors" href="/about">
             About
           </Link>
-          <Link
-            className="hover:text-primary transition-colors"
-            href="/contact"
-          >
+          <Link className="hover:text-primary transition-colors" href="/contact">
             Contact
           </Link>
-        </nav>
-        <div className="flex items-center gap-2">
+
           <Link href="/contact">
-            <Button
-              variant="default"
-              className="bg-primary text-primary-foreground hover:opacity-90 cursor-pointer"
-            >
+            <Button className="bg-primary text-primary-foreground hover:opacity-90 cursor-pointer">
               Enquire
             </Button>
           </Link>
+        </nav>
+
+        {/* --- Mobile Menu --- */}
+        <div className="md:hidden flex items-center">
+          <Sheet >
+            <SheetTrigger asChild>
+              <button
+                aria-label="Open menu"
+                className="p-2 rounded-md hover:bg-primary/10 transition"
+              >
+                <Menu className="h-6 w-6 text-foreground" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[80%] sm:w-[60%] bg-white p-6">
+              <SheetHeader>
+                <SheetTitle className="text-lg font-semibold mb-4">
+                  Menu
+                </SheetTitle>
+              </SheetHeader>
+
+              {/* --- Mobile Nav Links --- */}
+              <div className="flex flex-col gap-6 mt-4 text-lg">
+                <SheetClose asChild>
+                  <Link href="/" className="hover:text-primary transition-colors">
+                    Home
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link href="/gallery" className="hover:text-primary transition-colors">
+                    Gallery
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link href="/about" className="hover:text-primary transition-colors">
+                    About
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link href="/contact" className="hover:text-primary transition-colors">
+                    Contact
+                  </Link>
+                </SheetClose>
+              </div>
+
+              {/* --- Enquire Button --- */}
+              <div className="mt-8">
+                <SheetClose asChild>
+                  <Link href="/contact">
+                    <Button className="w-full bg-primary text-primary-foreground hover:opacity-90">
+                      Enquire
+                    </Button>
+                  </Link>
+                </SheetClose>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

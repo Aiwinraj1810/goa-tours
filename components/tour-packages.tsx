@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 
 const packages = [
   {
-    title: "3 Days, 2 Nights — Beach Escape",
+    title: "3 Days, 2 Nights — Quick Beach Escape",
     img: "https://placehold.co/600x400?text=Beach+Escape",
     desc: "Unwind on the golden sands of Baga & Calangute. Perfect for a quick yet soulful Goa retreat.",
     details: "Includes airport transfers, resort stay & sightseeing.",

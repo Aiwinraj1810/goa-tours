@@ -9,6 +9,7 @@ export default function HomePage() {
     <>
       <Hero />
       <TourPackages />
+      <hr />
       <FeaturedDestinations />
       <Highlights />
       <FloatingBookNow />
