@@ -20,7 +20,7 @@ const images = [
 export default function Hero() {
   return (
     <section
-      className="relative isolate overflow-hidden h-[90vh] w-full bg-background"
+      className="relative isolate overflow-hidden h-screen w-full bg-background"
       aria-label="Goa beach hero"
     >
       {/* --- Background Carousel --- */}
@@ -50,7 +50,7 @@ export default function Hero() {
       </div>
 
       {/* --- Overlay Text --- */}
-      <div className="relative z-10 flex h-full flex-col justify-end items-start max-w-7xl mx-auto px-5 py-10 lg:px-0 lg:py-10">
+      <div className="relative z-10 flex h-full flex-col justify-center items-start max-w-7xl mx-auto px-5 py-10 lg:px-0 lg:py-10">
         <motion.h1
           className="text-4xl md:text-6xl font-semibold text-white drop-shadow-md text-pretty"
           initial={{ opacity: 0, y: 30 }}
