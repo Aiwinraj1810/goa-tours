@@ -31,6 +31,7 @@ export default function FeaturedDestinations() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
+             viewport={{ once: true }}
           >
             <Card className="overflow-hidden bg-card shadow-sm">
               <div className="relative h-48 w-full">

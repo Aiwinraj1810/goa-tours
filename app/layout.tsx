@@ -11,12 +11,12 @@ import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: "Goa Tours | Sun, Sand & Serenity",
+  title: "Real Goa Holidays | Sun, Sand & Serenity",
   description:
     "Premium Goa travel and tour services. Discover beaches, forts, waterfalls, local cuisine, and sunset cruises.",
-  keywords: ["Goa Tourism", "Best Goa Travel Packages", "Goa Tours", "Sunset Cruises Goa", "Goa Beaches"],
+  keywords: ["Goa Tourism", "Best Goa Travel Packages", "Real Goa Holidays", "Sunset Cruises Goa", "Goa Beaches"],
   openGraph: {
-    title: "Goa Tours | Sun, Sand & Serenity",
+    title: "Real Goa Holidays | Sun, Sand & Serenity",
     description: "Discover the Soul of Goa — Sun, Sand & Serenity",
     images: ["/images/hero.jpg"],
     url: "https://example.com",
@@ -25,7 +25,6 @@ export const metadata: Metadata = {
   generator: "v0.app",
 }
 
-// 🩵 Poppins: main display font
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],

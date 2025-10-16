@@ -34,6 +34,7 @@ export default function Highlights() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.08 }}
+               viewport={{ once: true }}
             >
               <Card className="bg-card shadow-sm">
                 <CardHeader>
