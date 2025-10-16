@@ -1,7 +1,6 @@
 "use client"
 
 import Image from "next/image"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { motion } from "framer-motion"
 
 const spots = [
@@ -19,38 +18,45 @@ const spots = [
 
 export default function FeaturedDestinations() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16">
-      <div className="mb-8">
-        <h2 className="text-3xl font-semibold text-balance">Featured Destinations</h2>
-        <p className="text-muted-foreground">Handpicked experiences to feel Goa&apos;s heartbeat.</p>
+    <section className="mx-auto max-w-7xl px-4 py-20 space-y-24">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-semibold text-balance">Featured Destinations</h2>
+        <p className="text-muted-foreground">
+          Handpicked experiences to feel Goa&apos;s heartbeat.
+        </p>
       </div>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {spots.map((s, i) => (
+
+      {spots.map((spot, i) => {
+        const isReversed = i % 2 !== 0
+        return (
           <motion.div
-            key={s.title}
-            initial={{ opacity: 0, y: 16 }}
+            key={spot.title}
+            className={`flex flex-col md:flex-row items-center gap-8 md:gap-16 ${
+              isReversed ? "md:flex-row-reverse" : ""
+            }`}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.05 }}
-             viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: i * 0.1 }}
+            viewport={{ once: true }}
           >
-            <Card className="overflow-hidden bg-card shadow-sm pt-0 gap-4">
-              <div className="relative h-48 w-full">
-                <Image
-                  src={s.img || "/placeholder.svg"}
-                  alt={s.title}
-                  fill
-                  className="object-cover h-full w-full"
-                  // sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <CardHeader>
-                <CardTitle className="text-xl m-0 p-0">{s.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="m-0 text-sm text-muted-foreground">{s.desc}</CardContent>
-            </Card>
+            {/* Image Section */}
+            <div className="relative w-full md:w-1/2 h-[300px] md:h-[400px] overflow-hidden rounded-2xl shadow-md">
+              <Image
+                src={spot.img}
+                alt={spot.title}
+                fill
+                className="object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </div>
+
+            {/* Text Section */}
+            <div className="w-full md:w-1/2">
+              <h3 className="text-5xl font-semibold mb-4">{spot.title}</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">{spot.desc}</p>
+            </div>
           </motion.div>
-        ))}
-      </div>
+        )
+      })}
     </section>
   )
 }

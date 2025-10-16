@@ -5,14 +5,14 @@
 
 :root {
    --font-sans: var(--font-bricolage);
-  --background: #fff7ed; /* sand */
+  --background: #ddf6fb2f; /* light blue */
   --foreground: #0f172a; /* charcoal */
   --card: #ffffff;
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
 
-  --primary: #14b8a6; /* turquoise */
+  --primary: #087abb; /* turquoise */
   --primary-foreground: #f8fafc; /* near-white on primary */
 
   --secondary: #f1eadb; /* light sand tint */
