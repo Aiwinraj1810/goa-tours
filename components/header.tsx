@@ -25,8 +25,8 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full bg-white transition-all",
-        compact ? "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2" : "py-4",
+        " w-full z-50  bg-white transition-all",
+        compact ? "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2 top-3 max-w-7xl mx-auto px-10 rounded-xl sticky" : "py-4 sticky w-full top-0",
       )}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between transition-all">
