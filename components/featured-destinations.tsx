@@ -19,7 +19,7 @@ const spots = [
 
 export default function FeaturedDestinations() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-16">
+    <section className="mx-auto max-w-7xl px-4 py-16">
       <div className="mb-8">
         <h2 className="text-3xl font-semibold text-balance">Featured Destinations</h2>
         <p className="text-muted-foreground">Handpicked experiences to feel Goa&apos;s heartbeat.</p>

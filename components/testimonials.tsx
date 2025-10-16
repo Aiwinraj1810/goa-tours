@@ -25,7 +25,7 @@ const highlights = [
 export default function Highlights() {
   return (
     <section className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-4 py-16">
+      <div className="mx-auto max-w-7xl px-4 py-16">
         <h2 className="text-3xl font-semibold text-balance mb-8">Local Highlights</h2>
         <div className="grid gap-6 md:grid-cols-3">
           {highlights.map((h, i) => (

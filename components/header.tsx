@@ -25,13 +25,13 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all",
+        "sticky top-0 z-50 w-full  bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all",
         compact ? "py-2" : "py-4",
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between ">
         <Link href="/" className={cn("font-semibold text-balance tracking-tight", compact ? "text-lg" : "text-2xl")}>
-          <span className="text-primary">Goa</span> Tours
+          <span className="text-primary">Real Goa</span> Holidays
         </Link>
         <nav className="hidden gap-6 md:flex">
           <Link className="hover:text-primary transition-colors" href="/gallery">

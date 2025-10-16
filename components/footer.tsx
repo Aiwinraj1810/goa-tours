@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="border-t bg-card">
       <div className="mx-auto max-w-6xl px-4 py-8 grid gap-6 md:grid-cols-3">
         <div>
-          <h3 className="font-semibold mb-2">Goa Tours</h3>
+          <h3 className="font-semibold mb-2">Real Goa Holidays</h3>
           <p className="text-sm text-muted-foreground text-pretty">
             Premium local experiences across beaches, forts, waterfalls, churches, and nightlife.
           </p>
@@ -25,7 +25,7 @@ export default function Footer() {
           </Link>
         </nav>
         <div className="text-sm text-muted-foreground md:text-right">
-          © {new Date().getFullYear()} Goa Tours. All rights reserved.
+          © {new Date().getFullYear()} Real Goa Holidays. All rights reserved.
         </div>
       </div>
     </footer>

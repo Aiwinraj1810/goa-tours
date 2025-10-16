@@ -1,7 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
+import { Poppins, Bricolage_Grotesque } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import Header from "@/components/header"
@@ -22,8 +22,16 @@ export const metadata: Metadata = {
     url: "https://example.com",
     type: "website",
   },
-    generator: 'v0.app'
+  generator: "v0.app",
 }
+
+// 🩵 Poppins: main display font
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-bricolage",
+  display: "swap",
+})
 
 export default function RootLayout({
   children,
@@ -31,8 +39,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+    <html lang="en"  className={bricolage.variable}>
+      <body
+       className="font-sans"
+      >
         <QueryProvider>
           <Suspense fallback={<div>Loading...</div>}>
             <Header />
