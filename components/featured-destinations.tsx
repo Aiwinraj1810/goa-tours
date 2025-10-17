@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton"; // ✅ Import Shadcn Skeleton
+import { useState } from "react";
 
 const spots = [
   {
@@ -65,11 +67,13 @@ export default function FeaturedDestinations() {
         const [firstWord, ...restWords] = spot.title.split(" ");
         const restTitle = restWords.join(" ");
 
+        // ✅ Local image loading state
+        const [loaded, setLoaded] = useState(false);
+
         return (
           <div key={spot.title}>
             <motion.div
-              
-              className={`flex flex-col md:flex-row items-center  gap-8 md:gap-16 ${
+              className={`flex flex-col md:flex-row items-center gap-8 md:gap-16 ${
                 isReversed ? "md:flex-row-reverse" : ""
               }`}
               initial={{ opacity: 0, y: 20 }}
@@ -77,33 +81,43 @@ export default function FeaturedDestinations() {
               transition={{ duration: 0.6, delay: i * 0.1 }}
               viewport={{ once: true }}
             >
-              {/* Image Section with Title Overlay */}
+              {/* Image Section with Skeleton and Overlay */}
               <div className="relative w-full md:w-1/2 h-[300px] md:h-[400px] overflow-hidden rounded-2xl shadow-md">
+                {/* ✅ Skeleton while loading */}
+                {!loaded && (
+                  <Skeleton className="absolute inset-0 w-full h-full rounded-2xl" />
+                )}
+
                 <Image
                   src={spot.img}
                   alt={spot.title}
                   fill
-                  className="object-cover transition-transform duration-700 hover:scale-105"
+                  onLoad={() => setLoaded(true)}
+                  className={`object-cover transition-transform duration-700 hover:scale-105 ${
+                    loaded ? "opacity-100" : "opacity-0"
+                  }`}
                 />
+
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
 
                 {/* Title Overlay */}
                 <h3 className="absolute top-6 left-6 text-4xl md:text-8xl font-semibold text-white drop-shadow-lg">
-                  <span className="underline-offset-4 decoration-primary ">
+                  <span className="underline-offset-4 decoration-primary">
                     {firstWord}
                   </span>{" "}
                   {restTitle}
                 </h3>
               </div>
 
-              {/* Text Section (Description Only) */}
+              {/* Text Section */}
               <div className="w-full md:w-1/2 border-t-2 border-b-2 py-4">
                 <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
                   {spot.desc}
                 </p>
               </div>
             </motion.div>
+
             <hr className="mt-16" />
           </div>
         );

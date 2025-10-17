@@ -9,19 +9,19 @@ import { ArrowRight } from "lucide-react";
 const packages = [
   {
     title: "3 Days, 2 Nights — Quick Beach Escape",
-    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760683027/pexels-belle-co-99483-1000445_pz22cc.jpg",
+    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760686895/pexels-belle-co-99483-1000445_11zon_1_2_aiyarm.webp",
     desc: "Unwind on the golden sands of Baga & Calangute. Perfect for a quick yet soulful Goa retreat.",
     details: "Includes airport transfers, resort stay & sightseeing.",
   },
   {
     title: "5 Days, 4 Nights — Heritage & Adventure",
-    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760683137/pexels-urtimud-89-76108288-32262443_hkxvjg.jpg",
+    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760687485/pexels-urtimud-89-76108288-32262443_11zon_1_brpf4g.webp",
     desc: "Dive into Goa’s old-world charm, forts, waterfalls, and river cruises. A complete Goa experience!",
     details: "Includes guided tours, breakfast & adventure activities.",
   },
   {
     title: "Weekend Getaway — North Goa Vibes",
-    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760683256/pexels-ajay-donga-1113836-2174656_jalwo5.jpg",
+    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760687301/pexels-ajay-donga-1113836-2174656_11zon_1_fizuwo.webp",
     desc: "Perfect for a spontaneous escape! Explore beaches, shacks & nightlife in North Goa.",
     details: "Includes stay, breakfast & one-day scooter rental.",
   },
@@ -33,7 +33,8 @@ export default function TourPackages() {
       <div className="max-w-7xl mx-auto text-center mb-12">
         <h2 className="text-4xl font-semibold">Explore Our Tour Packages</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
-          Choose from curated Goa experiences — from short escapes to week-long adventures.
+          Choose from curated Goa experiences — from short escapes to week-long
+          adventures.
         </p>
       </div>
 
@@ -54,6 +55,7 @@ export default function TourPackages() {
                 src={pkg.img}
                 alt={pkg.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 559px"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
               {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div> */}
@@ -88,7 +90,8 @@ export default function TourPackages() {
             Want More Packages?
           </h3>
           <p className="text-muted-foreground mb-6">
-            We offer customized tours, family trips, and luxury experiences across Goa.
+            We offer customized tours, family trips, and luxury experiences
+            across Goa.
           </p>
           <Link href="/contact">
             <Button className="flex items-center gap-2 bg-primary text-primary-foreground hover:opacity-90">
