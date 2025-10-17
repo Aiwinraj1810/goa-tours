@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation"; // 👈 Import this
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -16,7 +17,17 @@ import {
 
 export default function Header() {
   const [compact, setCompact] = useState(false);
+  const pathname = usePathname(); // 👈 detect current route
 
+  // ✅ Nav links array
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Gallery", href: "/gallery" },
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" },
+  ];
+
+  // Compact header toggle
   useEffect(() => {
     let ticking = false;
     const onScroll = () => {
@@ -32,16 +43,25 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // 👇 Determine header position style based on route
+  const isHome = pathname === "/";
+
   return (
     <header
       className={cn(
-        "w-full z-50 transition-all",
+        // Position logic
+        isHome
+          ? "fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl z-50"
+          : "sticky top-0 z-50 max-w-7xl mx-auto",
+
+        // Transitions and base style
+        "transition-all duration-300 ease-in-out",
         compact
-          ? "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2 top-3 max-w-7xl mx-auto px-6 rounded-xl sticky shadow-md"
-          : "py-4 px-4 sticky bg-[#ddf6fb] w-full top-0"
+          ? "bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb] py-2 px-6 rounded-xl mt-3 shadow-none"
+          : "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 px-6 rounded-xl mt-3 shadow-md"
       )}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between transition-all">
+      <div className="flex items-center justify-between transition-all">
         {/* --- Logo --- */}
         <div className="flex items-center gap-4">
           <div className="relative h-12 w-12 sm:h-16 sm:w-16">
@@ -59,21 +79,28 @@ export default function Header() {
               compact ? "text-lg" : "text-2xl"
             )}
           >
-            <span className="text-primary">Real Goa</span> Holidays
+            <span className="text-primary">Real Goa</span>{" "}
+            <span className={compact ? "text-black" : "text-white"}>
+              Holidays
+            </span>
           </Link>
         </div>
 
         {/* --- Desktop Nav --- */}
         <nav className="hidden md:flex gap-6 items-center">
-          <Link className="hover:text-primary transition-colors" href="/gallery">
-            Gallery
-          </Link>
-          <Link className="hover:text-primary transition-colors" href="/about">
-            About
-          </Link>
-          <Link className="hover:text-primary transition-colors" href="/contact">
-            Contact
-          </Link>
+          {navLinks
+            .filter((item) => item.name !== "Home")
+            .map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`${
+                  compact ? "text-black" : "text-white"
+                } hover:text-primary transition-colors`}
+              >
+                {link.name}
+              </Link>
+            ))}
 
           <Link href="/contact">
             <Button className="bg-primary text-primary-foreground hover:opacity-90 cursor-pointer">
@@ -84,7 +111,7 @@ export default function Header() {
 
         {/* --- Mobile Menu --- */}
         <div className="md:hidden flex items-center">
-          <Sheet >
+          <Sheet>
             <SheetTrigger asChild>
               <button
                 aria-label="Open menu"
@@ -93,35 +120,28 @@ export default function Header() {
                 <Menu className="h-6 w-6 text-foreground" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[80%] sm:w-[60%] bg-white p-6">
+            <SheetContent
+              side="right"
+              className="w-[80%] sm:w-[60%] bg-white p-6"
+            >
               <SheetHeader>
                 <SheetTitle className="text-lg font-semibold mb-4">
                   Menu
                 </SheetTitle>
               </SheetHeader>
 
-              {/* --- Mobile Nav Links --- */}
+              {/* --- Mobile Nav --- */}
               <div className="flex flex-col gap-6 mt-4 text-lg">
-                <SheetClose asChild>
-                  <Link href="/" className="hover:text-primary transition-colors">
-                    Home
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link href="/gallery" className="hover:text-primary transition-colors">
-                    Gallery
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link href="/about" className="hover:text-primary transition-colors">
-                    About
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link href="/contact" className="hover:text-primary transition-colors">
-                    Contact
-                  </Link>
-                </SheetClose>
+                {navLinks.map((link) => (
+                  <SheetClose asChild key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="hover:text-primary transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  </SheetClose>
+                ))}
               </div>
 
               {/* --- Enquire Button --- */}

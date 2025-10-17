@@ -50,7 +50,7 @@ export default function Hero() {
       </div>
 
       {/* --- Overlay Text --- */}
-      <div className="relative z-10 flex h-full flex-col justify-center items-start max-w-7xl mx-auto px-5 py-10 lg:px-0 lg:py-10">
+      <div className="relative z-10 flex h-full flex-col justify-center items-start max-w-7xl mx-auto px-5 py-10 lg:px-0 lg:py-0">
         <motion.h1
           className="text-4xl md:text-6xl font-semibold text-white drop-shadow-md text-pretty"
           initial={{ opacity: 0, y: 30 }}
@@ -80,15 +80,12 @@ export default function Hero() {
           viewport={{ once: true }}
         >
           <Link href="/contact">
-            <Button className="bg-primary text-primary-foreground hover:opacity-90">
+            <Button className="bg-primary text-primary-foreground hover:bg-white hover:text-black cursor-pointer">
               Book Your Trip
             </Button>
           </Link>
           <Link href="/gallery">
-            <Button
-              variant="outline"
-              className="border-white bg-white text-black hover:bg-primary cursor-pointer hover:text-white"
-            >
+            <Button className="border-white bg-white text-black hover:bg-primary cursor-pointer hover:text-white">
               Explore Gallery
             </Button>
           </Link>
