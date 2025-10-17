@@ -9,19 +9,19 @@ import { ArrowRight } from "lucide-react";
 const packages = [
   {
     title: "3 Days, 2 Nights — Quick Beach Escape",
-    img: "https://placehold.co/600x400?text=Beach+Escape",
+    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760683027/pexels-belle-co-99483-1000445_pz22cc.jpg",
     desc: "Unwind on the golden sands of Baga & Calangute. Perfect for a quick yet soulful Goa retreat.",
     details: "Includes airport transfers, resort stay & sightseeing.",
   },
   {
     title: "5 Days, 4 Nights — Heritage & Adventure",
-    img: "https://placehold.co/600x400?text=Heritage+%26+Adventure",
+    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760683137/pexels-urtimud-89-76108288-32262443_hkxvjg.jpg",
     desc: "Dive into Goa’s old-world charm, forts, waterfalls, and river cruises. A complete Goa experience!",
     details: "Includes guided tours, breakfast & adventure activities.",
   },
   {
     title: "Weekend Getaway — North Goa Vibes",
-    img: "https://placehold.co/600x400?text=Weekend+Getaway",
+    img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760683256/pexels-ajay-donga-1113836-2174656_jalwo5.jpg",
     desc: "Perfect for a spontaneous escape! Explore beaches, shacks & nightlife in North Goa.",
     details: "Includes stay, breakfast & one-day scooter rental.",
   },
@@ -56,7 +56,7 @@ export default function TourPackages() {
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div> */}
             </div>
 
             {/* Text Content */}

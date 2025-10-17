@@ -52,7 +52,7 @@ export default function Header() {
         // Position logic
         isHome
           ? "fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl z-50"
-          : "sticky top-0 z-50 max-w-7xl mx-auto",
+          : "sticky top-0 z-50 max-w-7xl mx-auto bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb]",
 
         // Transitions and base style
         "transition-all duration-300 ease-in-out",
@@ -80,7 +80,7 @@ export default function Header() {
             )}
           >
             <span className="text-primary">Real Goa</span>{" "}
-            <span className={compact ? "text-black" : "text-white"}>
+            <span className={isHome ? compact ? "text-black" : "text-white" : "text-black"}>
               Holidays
             </span>
           </Link>
@@ -94,9 +94,14 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`${
-                  compact ? "text-black" : "text-white"
-                } hover:text-primary transition-colors`}
+                className={cn(
+                  "hover:text-primary transition-colors",
+                  isHome
+                    ? compact
+                      ? "text-black"
+                      : "text-white"
+                    : "text-black"
+                )}
               >
                 {link.name}
               </Link>
