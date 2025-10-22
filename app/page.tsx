@@ -88,6 +88,24 @@ export default function HomePage() {
           </div>
         )}
       </div>
+           <section aria-labelledby="clients-heading" className="py-16 bg-gray-50">
+        <div className="container mx-auto px-0 lg:px-4">
+          <div className="text-center mb-12">
+            <h2
+              id="clients-heading"
+              className="text-3xl font-bold text-gray-800 mb-4 text-pretty"
+            >
+              Memories That Stay with You
+            </h2>
+
+            <p className="text-gray-600 px-5 lg:px-0">
+              Memories made, moments cherished — here’s what travelers say about
+              Real Goa Holidays.
+            </p>
+          </div>
+          <ClientCarousel testimonials={testimonials} />
+        </div>
+      </section>
 
       {/* --- CTA Banner --- */}
       <section className="relative bg-[url('https://res.cloudinary.com/dur23cis9/image/upload/v1760684111/pexels-rohit-sharma-1230131-23322244_xyzvj8.jpg')] bg-cover bg-center py-24 mt-16">
@@ -113,24 +131,7 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-      <section aria-labelledby="clients-heading" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-0 lg:px-4">
-          <div className="text-center mb-12">
-            <h2
-              id="clients-heading"
-              className="text-3xl font-bold text-gray-800 mb-4 text-pretty"
-            >
-              Memories That Stay with You
-            </h2>
-
-            <p className="text-gray-600 px-5 lg:px-0">
-              Memories made, moments cherished — here’s what travelers say about
-              Real Goa Holidays.
-            </p>
-          </div>
-          <ClientCarousel testimonials={testimonials} />
-        </div>
-      </section>
+ 
 
       <FloatingBookNow />
     </>
