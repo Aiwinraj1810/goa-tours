@@ -24,7 +24,7 @@ export default function Header() {
     { name: "Home", href: "/" },
     { name: "Gallery", href: "/gallery" },
     { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+    // { name: "Contact", href: "/contact" },
   ];
 
   // Compact header toggle
@@ -66,7 +66,7 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="relative md:h-12 md:w-12 h-20 w-20 cursor-pointer"
+            className="relative md:h-16 md:w-16 h-20 w-20 cursor-pointer"
           >
             <Image
               src={"/images/logo.png"}
