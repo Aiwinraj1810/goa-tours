@@ -9,6 +9,7 @@ import Footer from "@/components/footer"
 import { QueryProvider } from "@/components/providers/query-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from "react"
+import "keen-slider/keen-slider.min.css";
 
 export const metadata: Metadata = {
   title: "Real Goa Holidays | Sun, Sand & Serenity",
