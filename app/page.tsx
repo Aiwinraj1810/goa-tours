@@ -108,7 +108,7 @@ export default function HomePage() {
       </section>
 
       {/* --- CTA Banner --- */}
-      <section className="relative bg-[url('https://res.cloudinary.com/dur23cis9/image/upload/v1760684111/pexels-rohit-sharma-1230131-23322244_xyzvj8.jpg')] bg-cover bg-center py-24 mt-16">
+      <section className="relative bg-[url('https://res.cloudinary.com/dur23cis9/image/upload/v1760684111/pexels-rohit-sharma-1230131-23322244_xyzvj8.jpg')] bg-cover bg-center py-40 mt-16">
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/60" />
 
