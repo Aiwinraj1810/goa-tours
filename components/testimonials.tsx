@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const highlights = [
   {
@@ -27,6 +28,8 @@ const highlights = [
 ];
 
 export default function Highlights() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   return (
     <section className="relative overflow-hidden bg-secondary/60 py-16">
       <div className="mx-auto max-w-7xl px-4 mb-8 text-center">
@@ -42,35 +45,41 @@ export default function Highlights() {
       <div className="relative flex overflow-hidden">
         <motion.div
           className="flex gap-6"
-          animate={{ x: ["0%", "-50%"] }} // Move half the width (since we duplicate the list)
+          animate={{ x: ["0%", "-50%"] }}
           transition={{
             repeat: Infinity,
-            duration: 80,
+            duration: 20,
             ease: "linear",
           }}
         >
-          {/* Duplicate content once to make the loop continuous */}
           {[...highlights, ...highlights].map((item, i) => (
             <motion.div
               key={i}
-              layout // ensures smooth continuity during loop
-              className="relative flex-shrink-0 w-[300px] h-[400px] overflow-hidden rounded-2xl shadow-md group"
+              layout
+              className="relative flex-shrink-0 w-[300px] h-[400px] overflow-hidden rounded-2xl shadow-md group cursor-pointer"
               initial={{ opacity: 0, scale: 0.98 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.6,
-                ease: "easeOut",
-              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              onClick={() => setActiveIndex(activeIndex === i ? null : i)} // toggle overlay for mobile
             >
               <Image
                 src={item.img}
                 alt={item.title}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
               />
 
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4">
+              {/* --- Overlay --- */}
+              <div
+                className={`
+                  absolute inset-0 flex flex-col justify-end p-4 transition-all duration-500
+                  bg-black/60 md:opacity-0 md:group-hover:opacity-100
+                  ${
+                    activeIndex === i ? "opacity-100" : "opacity-0 md:opacity-0"
+                  }
+                `}
+              >
                 <h3 className="text-xl font-semibold text-white">
                   {item.title}
                 </h3>

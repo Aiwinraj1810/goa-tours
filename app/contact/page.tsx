@@ -8,9 +8,9 @@ export default function ContactPage() {
       <p className="text-muted-foreground mb-8">
         Send us your travel dates and preferences—we’ll get back with the perfect Goa itinerary.
       </p>
-      <div className="grid gap-10 md:grid-cols-2">
+      <div className="grid gap-10 md:grid-cols-1">
         <EnquiryForm />
-        <ExistingEnquiries />
+       
       </div>
     </div>
   )

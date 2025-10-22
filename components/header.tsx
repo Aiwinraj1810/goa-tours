@@ -57,21 +57,26 @@ export default function Header() {
         // Transitions and base style
         "transition-all duration-300 ease-in-out",
         compact
-          ? "bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb] py-2 px-6 rounded-xl mt-3 shadow-none"
+          ? "bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb] py-2 px-6 rounded-b-xl  shadow-none"
           : "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 px-6 rounded-xl mt-3 shadow-md"
       )}
     >
       <div className="flex items-center justify-between transition-all">
         {/* --- Logo --- */}
         <div className="flex items-center gap-4">
-          <div className="relative h-12 w-12 sm:h-16 sm:w-16">
+          <Link
+            href="/"
+            className="relative md:h-12 md:w-12 h-20 w-20 cursor-pointer"
+          >
             <Image
               src={"/images/logo.png"}
-              alt={"logo"}
+              alt="Real Goa Holidays logo"
               fill
               className="object-cover h-full w-full"
+              priority
             />
-          </div>
+          </Link>
+
           <Link
             href="/"
             className={cn(
@@ -80,7 +85,11 @@ export default function Header() {
             )}
           >
             <span className="text-primary">Real Goa</span>{" "}
-            <span className={isHome ? compact ? "text-black" : "text-white" : "text-black"}>
+            <span
+              className={
+                isHome ? (compact ? "text-black" : "text-white") : "text-black"
+              }
+            >
               Holidays
             </span>
           </Link>

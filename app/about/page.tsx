@@ -4,7 +4,7 @@ import { Compass, Users, Heart } from "lucide-react"
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <h1 className="text-3xl font-semibold text-balance mb-4">About Goa Tours</h1>
+      <h1 className="text-3xl font-semibold text-balance mb-4">About Real Goa Holidays</h1>
       <p className="text-muted-foreground max-w-3xl">
         We’re local experts dedicated to authentic, premium experiences across Goa. From serene beaches and historic
         forts to hidden waterfalls and culinary trails, our mission is to craft moments that feel both effortless and
