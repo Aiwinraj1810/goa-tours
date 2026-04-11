@@ -27,7 +27,7 @@ export default function HomePage() {
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     if (highlightRef.current) observer.observe(highlightRef.current);
@@ -88,7 +88,7 @@ export default function HomePage() {
           </div>
         )}
       </div>
-           <section aria-labelledby="clients-heading" className="py-16 bg-gray-50">
+      <section aria-labelledby="clients-heading" className="py-16 bg-gray-50">
         <div className="container mx-auto px-0 lg:px-4">
           <div className="text-center mb-12">
             <h2
@@ -131,7 +131,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
- 
 
       <FloatingBookNow />
     </>

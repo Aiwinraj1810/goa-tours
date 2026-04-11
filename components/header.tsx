@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation"; // 👈 Import this
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -17,9 +17,11 @@ import {
 
 export default function Header() {
   const [compact, setCompact] = useState(false);
-  const pathname = usePathname(); // 👈 detect current route
+  const [visible, setVisible] = useState(true);
+  const pathname = usePathname();
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
-  // ✅ Nav links array
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Gallery", href: "/gallery" },
@@ -27,42 +29,62 @@ export default function Header() {
     // { name: "Contact", href: "/contact" },
   ];
 
-  // Compact header toggle
   useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setCompact(window.scrollY > 12);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    lastScrollY.current = window.scrollY;
+    setCompact(window.scrollY > 12);
+    setVisible(true);
 
-  // 👇 Determine header position style based on route
+    const onScroll = () => {
+      if (ticking.current) return;
+
+      ticking.current = true;
+
+      window.requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const delta = currentScrollY - lastScrollY.current;
+        const absDelta = Math.abs(delta);
+
+        setCompact(currentScrollY > 12);
+
+        if (currentScrollY < 10) {
+          setVisible(true);
+          lastScrollY.current = currentScrollY;
+        } else if (absDelta >= 5) {
+          if (delta > 0 && currentScrollY > 80) {
+            setVisible(false);
+          } else if (delta < 0) {
+            setVisible(true);
+          }
+
+          lastScrollY.current = currentScrollY;
+        }
+
+        ticking.current = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [pathname]);
+
   const isHome = pathname === "/";
 
   return (
     <header
       className={cn(
-        // Position logic
-        isHome
-          ? "fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl z-50"
-          : "sticky top-0 z-50 max-w-7xl mx-auto bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb]",
-
-        // Transitions and base style
-        "transition-all duration-300 ease-in-out",
+        "fixed top-0 left-1/2 z-50 w-full max-w-7xl -translate-x-1/2 transform transition-all duration-300 ease-in-out",
+        visible ? "translate-y-0" : "-translate-y-full",
+        !isHome &&
+          "bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb]",
         compact
-          ? "bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb] py-2 px-6 rounded-b-xl  shadow-none"
+          ? "bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb] py-2 px-6 rounded-b-xl shadow-none"
           : "bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 px-6 rounded-xl mt-3 shadow-md"
       )}
     >
       <div className="flex items-center justify-between transition-all">
-        {/* --- Logo --- */}
         <div className="flex items-center gap-4">
           <Link
             href="/"
@@ -95,7 +117,6 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* --- Desktop Nav --- */}
         <nav className="hidden md:flex gap-6 items-center">
           {navLinks
             .filter((item) => item.name !== "Home")
@@ -123,7 +144,6 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* --- Mobile Menu --- */}
         <div className="md:hidden flex items-center">
           <Sheet>
             <SheetTrigger asChild>
@@ -144,7 +164,6 @@ export default function Header() {
                 </SheetTitle>
               </SheetHeader>
 
-              {/* --- Mobile Nav --- */}
               <div className="flex flex-col gap-6 mt-4 text-lg">
                 {navLinks.map((link) => (
                   <SheetClose asChild key={link.name}>
@@ -158,7 +177,6 @@ export default function Header() {
                 ))}
               </div>
 
-              {/* --- Enquire Button --- */}
               <div className="mt-8">
                 <SheetClose asChild>
                   <Link href="/contact">
