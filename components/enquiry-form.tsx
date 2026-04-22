@@ -25,17 +25,21 @@ type Enquiry = {
   startDate: string;
   endDate: string;
   message?: string;
+  packageName?: string;
 };
 
-export default function EnquiryForm() {
+export default function EnquiryForm({ packageName }: { packageName?: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const today = new Date().toISOString().split("T")[0];
 
   const {
     control,
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors, isValid },
   } = useForm<Enquiry>({
     mode: "onChange",
@@ -47,6 +51,7 @@ export default function EnquiryForm() {
       startDate: "",
       endDate: "",
       message: "",
+      packageName: packageName ?? "",
     },
   });
 
@@ -90,6 +95,17 @@ export default function EnquiryForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-5 rounded-lg border bg-card p-5 shadow-sm"
     >
+      {packageName && (
+        <div>
+          <Label htmlFor="packageName">Package</Label>
+          <Input
+            id="packageName"
+            value={packageName}
+            disabled
+            className="bg-muted text-muted-foreground cursor-not-allowed"
+          />
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* --- Name --- */}
         <div>
@@ -161,7 +177,18 @@ export default function EnquiryForm() {
             name="startDate"
             control={control}
             rules={{ required: "Start date is required" }}
-            render={({ field }) => <Input id="startDate" type="date" {...field} />}
+            render={({ field }) => (
+              <Input
+                id="startDate"
+                type="date"
+                min={today}
+                {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  setValue("endDate", "", { shouldValidate: false });
+                }}
+              />
+            )}
           />
           {errors.startDate && <p className="text-sm text-red-500 mt-1">{errors.startDate.message}</p>}
         </div>
@@ -176,7 +203,14 @@ export default function EnquiryForm() {
               required: "End date is required",
               validate: () => isAfterDate(startDate, endDate),
             }}
-            render={({ field }) => <Input id="endDate" type="date" {...field} />}
+            render={({ field }) => (
+              <Input
+                id="endDate"
+                type="date"
+                min={startDate || today}
+                {...field}
+              />
+            )}
           />
           {errors.endDate && <p className="text-sm text-red-500 mt-1">{errors.endDate.message}</p>}
         </div>

@@ -57,7 +57,7 @@ export function ClientCarousel({ testimonials }: ClientCarouselProps) {
   }, [instanceRef]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
+    <div className="px-4">
       <div 
         ref={sliderRef} 
         className="keen-slider"

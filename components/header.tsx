@@ -24,9 +24,9 @@ export default function Header() {
 
   const navLinks = [
     { name: "Home", href: "/" },
+    { name: "Packages", href: "/packages" },
     { name: "Gallery", href: "/gallery" },
     { name: "About", href: "/about" },
-    // { name: "Contact", href: "/contact" },
   ];
 
   useEffect(() => {

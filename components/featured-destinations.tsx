@@ -1,11 +1,14 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton"; // ✅ Import Shadcn Skeleton
-import { useState } from "react";
+import HorizontalSlider from "./HorizontalSlider";
 
-const spots = [
+export type Spot = {
+  title: string;
+  img: string;
+  desc: string;
+};
+
+export const spots: Spot[] = [
   {
     title: "Baga Beach",
     img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-baga_c5zjwb.jpg",
@@ -52,76 +55,19 @@ const spots = [
 
 export default function FeaturedDestinations() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 space-y-24">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-semibold text-balance">
+    <section className="overflow-hidden bg-gradient-to-b from-background via-white to-secondary/20 py-20">
+      <div className="mx-auto mb-12 max-w-7xl px-4 text-center">
+        <p className="text-sm font-medium uppercase tracking-[0.35em] text-primary/80">
+          Signature Stops
+        </p>
+        <h2 className="mt-4 text-4xl font-semibold text-balance md:text-5xl">
           Featured Destinations
         </h2>
-        <p className="text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
           Handpicked experiences to feel Goa&apos;s heartbeat.
         </p>
       </div>
-
-      {spots.map((spot, i) => {
-        const isReversed = i % 2 !== 0;
-        const [firstWord, ...restWords] = spot.title.split(" ");
-        const restTitle = restWords.join(" ");
-
-        // ✅ Local image loading state
-        const [loaded, setLoaded] = useState(false);
-
-        return (
-          <div key={spot.title}>
-            <motion.div
-              className={`flex flex-col md:flex-row items-center gap-8 md:gap-16 ${
-                isReversed ? "md:flex-row-reverse" : ""
-              }`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              viewport={{ once: true }}
-            >
-              {/* Image Section with Skeleton and Overlay */}
-              <div className="relative w-full md:w-1/2 h-[300px] md:h-[400px] overflow-hidden rounded-2xl shadow-md">
-                {/* ✅ Skeleton while loading */}
-                {!loaded && (
-                  <Skeleton className="absolute inset-0 w-full h-full rounded-2xl" />
-                )}
-
-                <Image
-                  src={spot.img}
-                  alt={spot.title}
-                  fill
-                  onLoad={() => setLoaded(true)}
-                  className={`object-cover transition-transform duration-700 hover:scale-105 ${
-                    loaded ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
-
-                {/* Title Overlay */}
-                <h3 className="absolute top-6 left-6 text-4xl md:text-8xl font-semibold text-white drop-shadow-lg">
-                  <span className="underline-offset-4 decoration-primary">
-                    {firstWord}
-                  </span>{" "}
-                  {restTitle}
-                </h3>
-              </div>
-
-              {/* Text Section */}
-              <div className="w-full md:w-1/2 border-t-2 border-b-2 py-4">
-                <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
-                  {spot.desc}
-                </p>
-              </div>
-            </motion.div>
-
-            <hr className="mt-16" />
-          </div>
-        );
-      })}
+      <HorizontalSlider className="mx-auto max-w-[1800px]" />
     </section>
   );
 }
