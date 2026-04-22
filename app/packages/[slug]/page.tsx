@@ -25,7 +25,7 @@ export default async function PackageDetailPage({
   return (
     <>
       {/* Banner */}
-      <section className="relative h-screen w-full overflow-hidden">
+      <section className="relative h-[100svh] w-full overflow-hidden">
         <Image
           src={pkg.img}
           alt={pkg.title}

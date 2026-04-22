@@ -22,6 +22,8 @@ export default function Header() {
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
+  const isPackageDetail = /^\/packages\/.+/.test(pathname);
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Packages", href: "/packages" },
@@ -30,9 +32,12 @@ export default function Header() {
   ];
 
   useEffect(() => {
+    const bannerThreshold = window.innerHeight * 0.6;
+
     lastScrollY.current = window.scrollY;
     setCompact(window.scrollY > 12);
-    setVisible(true);
+    // Hide on page load if on detail page and at the top
+    setVisible(isPackageDetail ? window.scrollY >= bannerThreshold : true);
 
     const onScroll = () => {
       if (ticking.current) return;
@@ -46,7 +51,10 @@ export default function Header() {
 
         setCompact(currentScrollY > 12);
 
-        if (currentScrollY < 10) {
+        if (isPackageDetail && currentScrollY < bannerThreshold) {
+          setVisible(false);
+          lastScrollY.current = currentScrollY;
+        } else if (currentScrollY < 10) {
           setVisible(true);
           lastScrollY.current = currentScrollY;
         } else if (absDelta >= 5) {
@@ -68,7 +76,7 @@ export default function Header() {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [pathname]);
+  }, [pathname, isPackageDetail]);
 
   const isHome = pathname === "/";
 
