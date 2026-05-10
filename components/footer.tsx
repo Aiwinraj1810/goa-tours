@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CONTACT } from "@/lib/constants";
 
 export default function Footer() {
   return (
@@ -61,22 +62,24 @@ export default function Footer() {
         {/* --- Contact Info --- */}
         <div className="space-y-3">
           <h4 className="font-semibold text-lg mb-3 text-white">Contact Us</h4>
-          <p className="text-sm text-gray-200">
-            Calangute, North Goa, India
-            <br />
+          <div className="text-sm text-gray-200 space-y-1">
+            <p>{CONTACT.address}</p>
             <a
-              href="mailto:info@realgoaholidays.com"
-              className="text-primary hover:underline block mt-1"
+              href={CONTACT.emailHref}
+              className="text-primary hover:underline block"
             >
-              info@realgoaholidays.com
+              {CONTACT.email}
             </a>
-            <a
-              href="tel:+919876543210"
-              className="text-primary hover:underline block mt-1"
-            >
-              +91 98765 43210
-            </a>
-          </p>
+            {CONTACT.phones.map(({ value, href }) => (
+              <a
+                key={value}
+                href={href}
+                className="text-primary hover:underline block"
+              >
+                {value}
+              </a>
+            ))}
+          </div>
 
           {/* --- Download Brochure --- */}
           <a

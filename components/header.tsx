@@ -96,7 +96,7 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="relative md:h-20 md:w-20 h-24 w-24 cursor-pointer"
+            className="relative md:h-28 md:w-28 h-24 w-24 cursor-pointer"
           >
             <Image
               src={"/images/logo.png"}
@@ -111,10 +111,16 @@ export default function Header() {
             href="/"
             className={cn(
               "font-semibold hidden md:block text-balance transition-all tracking-tight",
-              compact ? "text-lg" : "text-2xl"
+              compact ? "text-xl" : "text-3xl"
             )}
           >
-            <span className="text-primary">Real Goa</span>{" "}
+            <span
+              className={
+                isHome ? (compact ? "text-primary" : "text-white") : "text-primary"
+              }
+            >
+              Real Goa
+            </span>{" "}
             <span
               className={
                 isHome ? (compact ? "text-black" : "text-white") : "text-black"
@@ -128,22 +134,26 @@ export default function Header() {
         <nav className="hidden md:flex gap-6 items-center">
           {navLinks
             .filter((item) => item.name !== "Home")
-            .map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={cn(
-                  "hover:text-primary transition-colors",
-                  isHome
-                    ? compact
-                      ? "text-black"
-                      : "text-white"
-                    : "text-black"
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
+            .map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={cn(
+                    "transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:h-[2px] after:w-full after:rounded-full after:transition-opacity",
+                    isHome
+                      ? compact
+                        ? "text-black hover:text-primary after:bg-primary"
+                        : "text-white hover:text-white/80 after:bg-white"
+                      : "text-black hover:text-primary after:bg-primary",
+                    isActive ? "font-medium after:opacity-100" : "after:opacity-0"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
 
           <Link href="/contact">
             <Button className="bg-primary text-primary-foreground hover:opacity-90 cursor-pointer">
@@ -164,20 +174,20 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-[80%] sm:w-[60%] bg-white p-6"
+              className="w-[80%] sm:w-[60%] bg-gradient-to-l from-[#f9f5e9] via-[#ddf6fb] to-[#ddf6fb] p-6"
             >
               <SheetHeader>
-                <SheetTitle className="text-lg font-semibold mb-4">
-                  Menu
+                <SheetTitle className="text-lg font-semibold mb-4 text-black">
+                  
                 </SheetTitle>
               </SheetHeader>
 
-              <div className="flex flex-col gap-6 mt-4 text-lg">
+              <div className="flex flex-col mt-4 text-lg divide-y divide-black/15">
                 {navLinks.map((link) => (
                   <SheetClose asChild key={link.name}>
                     <Link
                       href={link.href}
-                      className="hover:text-primary transition-colors"
+                      className="text-black hover:text-primary transition-colors py-4"
                     >
                       {link.name}
                     </Link>
