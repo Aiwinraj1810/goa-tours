@@ -8,7 +8,7 @@ const CommonContainer = ({
   hasPaddingY = true,
 }: CommonContainerProps) => {
   return (
-    <div className={hasPaddingY ? "py-28" : ""}>
+    <div className={hasPaddingY ? "py-32 md:pt-48" : ""}>
       {children}
     </div>
   );
