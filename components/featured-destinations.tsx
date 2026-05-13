@@ -1,6 +1,6 @@
 "use client";
 
-import HorizontalSlider from "./HorizontalSlider";
+import DestinationsCarousel from "./DestinationsCarousel";
 
 export type Spot = {
   title: string;
@@ -67,7 +67,7 @@ export default function FeaturedDestinations() {
           Handpicked experiences to feel Goa&apos;s heartbeat.
         </p>
       </div>
-      <HorizontalSlider className="mx-auto max-w-[1800px]" />
+      <DestinationsCarousel className="mx-auto max-w-[1800px] px-4" />
     </section>
   );
 }
