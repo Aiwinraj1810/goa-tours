@@ -20,7 +20,7 @@ const images = [
 export default function Hero() {
   return (
     <section
-      className="relative isolate overflow-hidden h-screen w-full bg-background"
+      className="relative isolate overflow-hidden h-[100svh] w-full bg-background"
       aria-label="Goa beach hero"
     >
       {/* --- Background Carousel --- */}
@@ -35,12 +35,12 @@ export default function Hero() {
         >
           <CarouselContent>
             {images.map((src, i) => (
-              <CarouselItem key={i} className="relative h-[100vh]">
+              <CarouselItem key={i} className="relative h-[100svh]">
                 <Image
                   src={src}
                   alt={`Goa view ${i + 1}`}
                   fill
-                  className="object-cover brightness-[0.55]"
+                  className="object-cover brightness-[0.90]"
                   priority={i === 0}
                 />
               </CarouselItem>
@@ -50,7 +50,7 @@ export default function Hero() {
       </div>
 
       {/* --- Overlay Text --- */}
-      <div className="relative z-10 flex h-full flex-col justify-center items-start max-w-7xl mx-auto px-5 py-10 lg:px-0 lg:py-0">
+      <div className="relative z-10 flex h-full flex-col justify-end md:justify-center items-start max-w-7xl mx-auto px-5 pb-16 lg:pb-0 lg:py-0">
         <motion.h1
           className="text-4xl md:text-6xl font-semibold text-white drop-shadow-md text-pretty"
           initial={{ opacity: 0, y: 30 }}
@@ -73,7 +73,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          className="mt-8 flex flex-wrap  w-full lg:w-fit justify-center gap-3"
+          className="mt-8 flex flex-wrap  w-full lg:w-fit justify-start md:justify-center gap-3"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
