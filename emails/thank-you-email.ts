@@ -55,8 +55,9 @@ export function thankYouEmailHtml(data: ThankYouEmailProps): string {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thank you for your enquiry – Real Goa Holidays</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&display=swap" rel="stylesheet" />
 </head>
-<body style="margin:0;padding:0;background-color:#f0f9ff;font-family:Georgia,serif;">
+<body style="margin:0;padding:0;background-color:#f0f9ff;font-family:'Bricolage Grotesque',system-ui,-apple-system,sans-serif;">
 
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f9ff;padding:32px 16px;">
     <tr>
@@ -67,13 +68,13 @@ export function thankYouEmailHtml(data: ThankYouEmailProps): string {
           <tr>
             <td style="padding:0;margin:0;position:relative;">
               <img
-                src="${SITE_URL}/images/hero.jpg"
+                src="https://res.cloudinary.com/dur23cis9/image/upload/v1760680037/hero_x2tcly.jpg"
                 alt="Beautiful Goa"
                 width="600"
                 style="width:100%;max-width:600px;height:220px;object-fit:cover;display:block;"
               />
               <!-- Overlay -->
-              <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,rgba(8,122,187,0.35) 0%,rgba(8,122,187,0.65) 100%);"></div>
+              <!--<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,rgba(8,122,187,0.35) 0%,rgba(8,122,187,0.65) 100%);"></div>-->
             </td>
           </tr>
 
@@ -81,13 +82,13 @@ export function thankYouEmailHtml(data: ThankYouEmailProps): string {
           <tr>
             <td align="center" style="background:#087abb;padding:20px 32px 24px;">
               <img
-                src="${SITE_URL}/images/logo.png"
+                src="https://res.cloudinary.com/dur23cis9/image/upload/v1778997401/samples/Goa-tours/logo_qxdtsd.png"
                 alt="Real Goa Holidays"
                 width="80"
                 style="width:80px;height:80px;object-fit:contain;border-radius:50%;background:#fff;padding:4px;display:block;margin:0 auto 10px;"
               />
               <p style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:0.5px;">Real Goa Holidays</p>
-              <p style="margin:4px 0 0;color:#bae6fd;font-size:13px;letter-spacing:1px;text-transform:uppercase;">Your Goa, Your Way</p>
+              <p style="margin:4px 0 0;color:#bae6fd;font-size:13px;letter-spacing:1px;text-transform:uppercase;">Enquiry confirmation</p>
             </td>
           </tr>
 
@@ -96,7 +97,7 @@ export function thankYouEmailHtml(data: ThankYouEmailProps): string {
             <td style="padding:36px 40px 8px;">
               <p style="margin:0 0 8px;color:#087abb;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;">Enquiry Confirmed</p>
               <h1 style="margin:0 0 16px;color:#0f172a;font-size:26px;font-weight:700;line-height:1.3;">
-                Thank you, ${name}! 🌊
+                Thank you, ${name}!
               </h1>
               <p style="margin:0;color:#334155;font-size:15px;line-height:1.7;">
                 We've received your enquiry and our team will get back to you within <strong>24 hours</strong>.
@@ -169,7 +170,7 @@ export function thankYouEmailHtml(data: ThankYouEmailProps): string {
                     <div style="width:26px;height:26px;background:#fb923c;border-radius:50%;text-align:center;line-height:26px;color:#fff;font-size:12px;font-weight:700;">3</div>
                   </td>
                   <td style="padding-left:12px;">
-                    <p style="margin:0;color:#0f172a;font-size:14px;font-weight:600;">Pack your bags for Goa! 🌴</p>
+                    <p style="margin:0;color:#0f172a;font-size:14px;font-weight:600;">Pack your bags for Goa!</p>
                     <p style="margin:4px 0 0;color:#64748b;font-size:13px;">We'll handle everything so you can focus on the memories.</p>
                   </td>
                 </tr>
@@ -181,10 +182,10 @@ export function thankYouEmailHtml(data: ThankYouEmailProps): string {
           <tr>
             <td align="center" style="padding:0 40px 40px;">
               <a
-                href="${SITE_URL}/packages"
+                href="${SITE_URL}/gallery"
                 style="display:inline-block;background:#087abb;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:13px 32px;border-radius:50px;letter-spacing:0.3px;"
               >
-                Explore Our Packages
+                Explore the Gallery
               </a>
             </td>
           </tr>

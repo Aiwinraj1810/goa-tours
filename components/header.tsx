@@ -91,7 +91,7 @@ export default function Header() {
             className="relative md:h-32 md:w-32 h-24 w-24 cursor-pointer"
           >
             <Image
-              src={"/images/logo.png"}
+              src={"https://res.cloudinary.com/dur23cis9/image/upload/v1778997401/samples/Goa-tours/logo_qxdtsd.png"}
               alt="Real Goa Holidays logo"
               fill
               className="object-cover h-full w-full"

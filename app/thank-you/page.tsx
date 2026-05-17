@@ -105,7 +105,7 @@ export default function ThankYouPage() {
           className="mt-12"
         >
           <Image
-            src="/images/logo.png"
+            src="https://res.cloudinary.com/dur23cis9/image/upload/v1778997401/samples/Goa-tours/logo_qxdtsd.png"
             alt="Real Goa Holidays"
             width={56}
             height={56}

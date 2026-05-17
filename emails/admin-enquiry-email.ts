@@ -75,8 +75,9 @@ export function adminEnquiryEmailHtml(data: AdminEnquiryEmailProps): string {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Enquiry – Real Goa Holidays</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&display=swap" rel="stylesheet" />
 </head>
-<body style="margin:0;padding:0;background-color:#f0f9ff;font-family:Georgia,serif;">
+<body style="margin:0;padding:0;background-color:#f0f9ff;font-family:'Bricolage Grotesque',system-ui,-apple-system,sans-serif;">
 
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f9ff;padding:32px 16px;">
     <tr>
@@ -90,7 +91,7 @@ export function adminEnquiryEmailHtml(data: AdminEnquiryEmailProps): string {
                 <tr>
                   <td>
                     <img
-                      src="${SITE_URL}/images/logo.png"
+                      src="https://res.cloudinary.com/dur23cis9/image/upload/v1778997401/samples/Goa-tours/logo_qxdtsd.png"
                       alt="Real Goa Holidays"
                       width="52"
                       style="width:52px;height:52px;object-fit:contain;border-radius:50%;background:#fff;padding:3px;display:block;"
