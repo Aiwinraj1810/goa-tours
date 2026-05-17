@@ -137,7 +137,7 @@ export default function FloatingBookNow() {
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold">Enquiry</DialogTitle>
           </DialogHeader>
-          <EnquiryForm />
+          <EnquiryForm onSuccess={() => setDialogOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>

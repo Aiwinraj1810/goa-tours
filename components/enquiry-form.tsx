@@ -1,6 +1,7 @@
 "use client";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import {
   isValidIndianPhone,
   isPositiveNumber,
   isSafeMessage,
+  isAfterToday,
   isAfterDate,
 } from "@/lib/form-validations";
 
@@ -28,8 +30,15 @@ type Enquiry = {
   packageName?: string;
 };
 
-export default function EnquiryForm({ packageName }: { packageName?: string }) {
+export default function EnquiryForm({
+  packageName,
+  onSuccess,
+}: {
+  packageName?: string;
+  onSuccess?: () => void;
+}) {
   const { toast } = useToast();
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const today = new Date().toISOString().split("T")[0];
@@ -64,12 +73,10 @@ export default function EnquiryForm({ packageName }: { packageName?: string }) {
       return res.data;
     },
     onSuccess: () => {
-      toast({
-        title: "Enquiry sent",
-        description: "We will get back to you shortly.",
-      });
       queryClient.invalidateQueries({ queryKey: ["inquiries"] });
       reset();
+      onSuccess?.();
+      router.push("/thank-you");
     },
     onError: () => {
       toast({
@@ -176,7 +183,10 @@ export default function EnquiryForm({ packageName }: { packageName?: string }) {
           <Controller
             name="startDate"
             control={control}
-            rules={{ required: "Start date is required" }}
+            rules={{
+              required: "Start date is required",
+              validate: { isAfterToday },
+            }}
             render={({ field }) => (
               <Input
                 id="startDate"

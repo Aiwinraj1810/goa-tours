@@ -70,7 +70,7 @@ export default function Header() {
     };
   }, [pathname]);
 
-  const isHome = pathname === "/";
+  const isHome = pathname === "/" || pathname === "/thank-you";
 
   return (
     <header
