@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server"
+// TODO: Uncomment the line below once RESEND_API_KEY is added to .env.local
+// import { sendEnquiryEmails } from "@/lib/mailer"
 
 type Enquiry = {
   id: string
@@ -39,5 +41,9 @@ export async function POST(req: Request) {
     createdAt: new Date().toISOString(),
   }
   store.unshift(item)
+
+  // TODO: Uncomment once RESEND_API_KEY is in .env.local and domain DNS is verified
+  // await sendEnquiryEmails(item)
+
   return NextResponse.json(item, { status: 201 })
 }

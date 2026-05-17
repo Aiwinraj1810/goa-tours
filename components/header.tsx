@@ -1,13 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Menu, Phone } from "lucide-react";
-import { CONTACT } from "@/lib/constants";
+import { Menu } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -20,12 +18,6 @@ import {
 export default function Header() {
   const [compact, setCompact] = useState(false);
   const [visible, setVisible] = useState(true);
-  const [phoneExpanded, setPhoneExpanded] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setPhoneExpanded(true), 1000);
-    return () => clearTimeout(t);
-  }, []);
   const pathname = usePathname();
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
@@ -86,7 +78,7 @@ export default function Header() {
     };
   }, [pathname, isPackageDetail]);
 
-  const isHome = pathname === "/";
+  const isHome = pathname === "/" || pathname === "/thank-you";
 
   return (
     <header
@@ -107,7 +99,7 @@ export default function Header() {
             className="relative md:h-32 md:w-32 h-24 w-24 cursor-pointer"
           >
             <Image
-              src={"/images/logo.png"}
+              src={"https://res.cloudinary.com/dur23cis9/image/upload/v1778997401/samples/Goa-tours/logo_qxdtsd.png"}
               alt="Real Goa Holidays logo"
               fill
               className="object-cover h-full w-full"
@@ -139,36 +131,6 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Mobile-only centered pill */}
-        <a
-          href={CONTACT.phones[0].href}
-          className="md:hidden flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-white text-primary ring-1 ring-primary/20 hover:shadow-sm overflow-hidden"
-        >
-          <motion.span
-            animate={phoneExpanded ? { rotate: [0, -15, 15, -12, 12, -8, 8, 0] } : {}}
-            transition={{ duration: 0.7, delay: 0.5, ease: "easeInOut" }}
-            style={{ display: "inline-flex" }}
-          >
-            <Phone className="h-3.5 w-3.5 shrink-0" />
-          </motion.span>
-          <motion.span
-            className="whitespace-nowrap overflow-hidden block"
-            initial={{ maxWidth: 0, opacity: 0, marginLeft: 0 }}
-            animate={{
-              maxWidth: phoneExpanded ? "160px" : "0px",
-              opacity: phoneExpanded ? 1 : 0,
-              marginLeft: phoneExpanded ? "6px" : "0px",
-            }}
-            transition={{
-              maxWidth: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-              opacity: { duration: 0.3, delay: 0.15 },
-              marginLeft: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-            }}
-          >
-            {CONTACT.phones[0].value}
-          </motion.span>
-        </a>
-
         <nav className="hidden md:flex gap-6 items-center">
           {navLinks
             .filter((item) => item.name !== "Home")
@@ -192,35 +154,6 @@ export default function Header() {
                 </Link>
               );
             })}
-
-          <a
-            href={CONTACT.phones[0].href}
-            className="flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-white text-primary ring-1 ring-primary/20 hover:shadow-sm overflow-hidden"
-          >
-            <motion.span
-              animate={phoneExpanded ? { rotate: [0, -15, 15, -12, 12, -8, 8, 0] } : {}}
-              transition={{ duration: 0.7, delay: 0.5, ease: "easeInOut" }}
-              style={{ display: "inline-flex" }}
-            >
-              <Phone className="h-3.5 w-3.5 shrink-0" />
-            </motion.span>
-            <motion.span
-              className="whitespace-nowrap overflow-hidden block"
-              initial={{ maxWidth: 0, opacity: 0, marginLeft: 0 }}
-              animate={{
-                maxWidth: phoneExpanded ? "160px" : "0px",
-                opacity: phoneExpanded ? 1 : 0,
-                marginLeft: phoneExpanded ? "6px" : "0px",
-              }}
-              transition={{
-                maxWidth: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-                opacity: { duration: 0.3, delay: 0.15 },
-                marginLeft: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-              }}
-            >
-              {CONTACT.phones[0].value}
-            </motion.span>
-          </a>
 
           <Link href="/contact">
             <Button className="bg-primary text-primary-foreground hover:opacity-90 cursor-pointer">
@@ -263,16 +196,6 @@ export default function Header() {
               </div>
 
               <div className="mt-6">
-                <a
-                  href={CONTACT.phones[0].href}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium ring-1 ring-primary/40 text-primary w-fit hover:bg-primary/10 transition-all"
-                >
-                  <Phone className="h-4 w-4" />
-                  {CONTACT.phones[0].value}
-                </a>
-              </div>
-
-              <div className="mt-4">
                 <SheetClose asChild>
                   <Link href="/contact">
                     <Button className="w-full bg-primary text-primary-foreground hover:opacity-90">

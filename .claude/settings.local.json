@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir E:\\\\Work\\\\goa-tours\\\\public\\\\images *)",
+      "Bash(dir E:\\\\Work\\\\goa-tours\\\\public *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm remove *)"
+    ]
+  }
+}

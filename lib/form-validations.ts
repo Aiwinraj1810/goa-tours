@@ -42,6 +42,15 @@ export const isPositiveNumber = (value: number) => {
   return true;
 };
 
+// ✅ startDate must not be in the past (guards against browser autofill bypassing min attribute)
+export const isAfterToday = (value: string) => {
+  if (!value) return true;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (new Date(value) < today) return "Travel date cannot be in the past";
+  return true;
+};
+
 // ✅ Cross-field: endDate must be after startDate
 export const isAfterDate = (startDate: string, endDate: string) => {
   if (!startDate || !endDate) return true;
