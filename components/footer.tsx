@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CONTACT } from "@/lib/constants";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const destinationMatch = pathname.match(/^\/(goa|kerala)/);
+  const destination = destinationMatch ? destinationMatch[1] : null;
   return (
     <footer
       className="relative text-white"
@@ -35,15 +41,20 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold text-lg mb-3 text-white">Quick Links</h4>
           <nav className="flex flex-col gap-2 text-sm text-gray-200">
-            <Link className="hover:text-primary transition-colors" href="/">
-              Home
-            </Link>
             <Link
               className="hover:text-primary transition-colors"
-              href="/gallery"
+              href={destination ? `/${destination}` : "/"}
             >
-              Gallery
+              Home
             </Link>
+            {destination && (
+              <Link
+                className="hover:text-primary transition-colors"
+                href={`/${destination}/gallery`}
+              >
+                Gallery
+              </Link>
+            )}
             <Link
               className="hover:text-primary transition-colors"
               href="/about"
@@ -52,7 +63,7 @@ export default function Footer() {
             </Link>
             <Link
               className="hover:text-primary transition-colors"
-              href="/contact"
+              href={destination ? `/${destination}/contact` : "/about"}
             >
               Contact
             </Link>

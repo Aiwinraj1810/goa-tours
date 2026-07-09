@@ -4,7 +4,22 @@
       "Bash(dir E:\\\\Work\\\\goa-tours\\\\public\\\\images *)",
       "Bash(dir E:\\\\Work\\\\goa-tours\\\\public *)",
       "Bash(pnpm add *)",
-      "Bash(pnpm remove *)"
+      "Bash(pnpm remove *)",
+      "Bash(Get-ChildItem -Path \"E:\\\\Work\\\\goa-tours\" -Force)",
+      "Bash(Select-Object Name, FullName)",
+      "Bash(python -c \"import docx; print\\('python-docx available'\\)\")",
+      "Bash(pip install *)",
+      "Bash(python3 -c \"import docx; print\\('python-docx available'\\)\")",
+      "Bash(cd /tmp)",
+      "Bash(node -e \"require\\('docx'\\)\")",
+      "Bash(npm install *)",
+      "Bash(mkdir -p /tmp/quotation-gen)",
+      "Read(//tmp/**)",
+      "Bash(node generate.mjs)",
+      "Bash(node -e \"require\\('docx'\\); console.log\\('ok'\\)\")",
+      "Bash(pnpm --version)",
+      "Bash(node generate-quote.mjs)",
+      "Bash(npx tsc *)"
     ]
   }
 }

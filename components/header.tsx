@@ -22,14 +22,22 @@ export default function Header() {
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
-  const isPackageDetail = /^\/packages\/.+/.test(pathname);
+  const destinationMatch = pathname.match(/^\/(goa|kerala)/);
+  const destination = destinationMatch ? destinationMatch[1] : null;
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Packages", href: "/packages" },
-    { name: "Gallery", href: "/gallery" },
-    { name: "About", href: "/about" },
-  ];
+  const isPackageDetail = /^\/(goa|kerala)\/packages\/.+/.test(pathname);
+
+  const navLinks = destination
+    ? [
+        { name: "Home", href: `/${destination}` },
+        { name: "Packages", href: `/${destination}/packages` },
+        { name: "Gallery", href: `/${destination}/gallery` },
+        { name: "About", href: "/about" },
+      ]
+    : [
+        { name: "Home", href: "/" },
+        { name: "About", href: "/about" },
+      ];
 
   useEffect(() => {
     const bannerThreshold = window.innerHeight * 0.6;
@@ -78,7 +86,11 @@ export default function Header() {
     };
   }, [pathname, isPackageDetail]);
 
-  const isHome = pathname === "/" || pathname === "/thank-you";
+  const isHome =
+    pathname === "/" ||
+    pathname === "/thank-you" ||
+    pathname === "/goa" ||
+    pathname === "/kerala";
 
   return (
     <header
@@ -95,7 +107,7 @@ export default function Header() {
       <div className="relative flex items-center justify-between transition-all">
         <div className="flex items-center gap-4">
           <Link
-            href="/"
+            href={destination ? `/${destination}` : "/"}
             className="relative md:h-32 md:w-32 h-24 w-24 cursor-pointer"
           >
             <Image
@@ -108,7 +120,7 @@ export default function Header() {
           </Link>
 
           <Link
-            href="/"
+            href={destination ? `/${destination}` : "/"}
             className={cn(
               "font-semibold hidden md:block text-balance transition-all tracking-tight",
               compact ? "text-xl" : "text-3xl"
@@ -155,7 +167,7 @@ export default function Header() {
               );
             })}
 
-          <Link href="/contact">
+          <Link href={destination ? `/${destination}/contact` : "/about"}>
             <Button className="bg-primary text-primary-foreground hover:opacity-90 cursor-pointer">
               Enquire
             </Button>

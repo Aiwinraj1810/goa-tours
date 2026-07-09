@@ -6,19 +6,24 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Dialog, DialogPortal, DialogOverlay, DialogTitle } from "@/components/ui/dialog";
 
-const images = [
-  "/images/dest-baga.jpg",
-  "/images/dest-chapora.jpg",
-  "/images/dest-dudhsagar.jpg",
-  "/images/dest-bom-jesus.jpg",
-  "/images/dest-anjuna.jpg",
-  "/images/dest-nightlife.jpg",
-  "/images/gallery-7.jpg",
-  "/images/gallery-8.jpg",
-  "/images/gallery-9.jpg",
+type GalleryImage = {
+  src: string;
+  alt: string;
+};
+
+const defaultImages: GalleryImage[] = [
+  { src: "/images/dest-baga.jpg", alt: "Baga Beach, Goa" },
+  { src: "/images/dest-chapora.jpg", alt: "Chapora Fort, Goa" },
+  { src: "/images/dest-dudhsagar.jpg", alt: "Dudhsagar Falls, Goa" },
+  { src: "/images/dest-bom-jesus.jpg", alt: "Basilica of Bom Jesus, Goa" },
+  { src: "/images/dest-anjuna.jpg", alt: "Anjuna Beach, Goa" },
+  { src: "/images/dest-nightlife.jpg", alt: "Goa Nightlife" },
+  { src: "/images/gallery-7.jpg", alt: "Goa scenery" },
+  { src: "/images/gallery-8.jpg", alt: "Goa scenery" },
+  { src: "/images/gallery-9.jpg", alt: "Goa scenery" },
 ];
 
-export default function GalleryGrid() {
+export default function GalleryGrid({ images = defaultImages }: { images?: GalleryImage[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const prev = () =>
@@ -30,7 +35,7 @@ export default function GalleryGrid() {
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-        {images.map((src, index) => (
+        {images.map(({ src }, index) => (
           <button
             key={src}
             onClick={() => setActiveIndex(index)}
@@ -39,8 +44,8 @@ export default function GalleryGrid() {
           >
             <div className="relative h-48 w-full">
               <Image
-                src={src}
-                alt="Goa scene"
+                src={images[index].src}
+                alt={images[index].alt}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -69,8 +74,8 @@ export default function GalleryGrid() {
             <div className="relative flex-1 w-full">
               {activeIndex !== null && (
                 <Image
-                  src={images[activeIndex]}
-                  alt="Goa full"
+                  src={images[activeIndex].src}
+                  alt={images[activeIndex].alt}
                   fill
                   className="object-contain"
                   priority

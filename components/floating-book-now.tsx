@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import EnquiryForm from "./enquiry-form";
 
-export default function FloatingBookNow() {
+export default function FloatingBookNow({ destination }: { destination: "goa" | "kerala" }) {
   const [phoneExpanded, setPhoneExpanded] = useState(false);
   const [bookExpanded, setBookExpanded] = useState(false);
   const [pastHero, setPastHero] = useState(false);
@@ -137,7 +137,7 @@ export default function FloatingBookNow() {
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold">Enquiry</DialogTitle>
           </DialogHeader>
-          <EnquiryForm onSuccess={() => setDialogOpen(false)} />
+          <EnquiryForm destination={destination} onSuccess={() => setDialogOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>

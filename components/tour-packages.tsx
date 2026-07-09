@@ -5,15 +5,25 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { packages } from "@/lib/packages";
+import type { Package } from "@/lib/destinations/types";
 
-export default function TourPackages() {
+type TourPackagesProps = {
+  packages: Package[];
+  destination: string;
+  destinationLabel: string;
+};
+
+export default function TourPackages({
+  packages,
+  destination,
+  destinationLabel,
+}: TourPackagesProps) {
   return (
     <section className="bg-gradient-to-b from-background to-secondary/10 py-20 px-4">
       <div className="max-w-7xl mx-auto text-center mb-12">
         <h2 className="text-4xl font-semibold">Explore Our Tour Packages</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
-          Choose from curated Goa experiences — from short escapes to week-long
+          Choose from curated {destinationLabel} experiences — from short escapes to week-long
           adventures.
         </p>
       </div>
@@ -45,7 +55,7 @@ export default function TourPackages() {
               <p className="text-muted-foreground text-sm mb-3">{pkg.desc}</p>
               <p className="text-foreground/80 text-xs mb-6">{pkg.details}</p>
 
-              <Link href={`/packages/${pkg.slug}`}>
+              <Link href={`/${destination}/packages/${pkg.slug}`}>
                 <Button className="w-full bg-primary text-primary-foreground hover:opacity-90">
                   View Details
                 </Button>
@@ -66,9 +76,9 @@ export default function TourPackages() {
           </h3>
           <p className="text-muted-foreground mb-6">
             We offer customized tours, family trips, and luxury experiences
-            across Goa.
+            across {destinationLabel}.
           </p>
-          <Link href="/packages">
+          <Link href={`/${destination}/packages`}>
             <Button className="flex items-center gap-2 bg-primary text-primary-foreground hover:opacity-90">
               Explore More <ArrowRight className="w-4 h-4" />
             </Button>

@@ -28,13 +28,16 @@ type Enquiry = {
   endDate: string;
   message?: string;
   packageName?: string;
+  destination: "goa" | "kerala";
 };
 
 export default function EnquiryForm({
   packageName,
+  destination,
   onSuccess,
 }: {
   packageName?: string;
+  destination: "goa" | "kerala";
   onSuccess?: () => void;
 }) {
   const { toast } = useToast();
@@ -61,6 +64,7 @@ export default function EnquiryForm({
       endDate: "",
       message: "",
       packageName: packageName ?? "",
+      destination,
     },
   });
 
@@ -76,7 +80,7 @@ export default function EnquiryForm({
       queryClient.invalidateQueries({ queryKey: ["inquiries"] });
       reset();
       onSuccess?.();
-      router.push("/thank-you");
+      router.push(`/thank-you?destination=${destination}`);
     },
     onError: () => {
       toast({

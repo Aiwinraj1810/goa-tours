@@ -11,17 +11,29 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
-const images = [
+const defaultImages = [
   "/images/gallery-7.jpg",
   "/images/gallery-8.jpg",
   "/images/gallery-9.jpg",
 ];
 
-export default function Hero() {
+type HeroProps = {
+  destination: string;
+  heading: string;
+  subheading: string;
+  images?: string[];
+};
+
+export default function Hero({
+  destination,
+  heading,
+  subheading,
+  images = defaultImages,
+}: HeroProps) {
   return (
     <section
       className="relative isolate overflow-hidden h-[100svh] w-full bg-background"
-      aria-label="Goa beach hero"
+      aria-label={`${destination} hero`}
     >
       {/* --- Background Carousel --- */}
       <div className="absolute inset-0">
@@ -38,7 +50,7 @@ export default function Hero() {
               <CarouselItem key={i} className="relative h-[100svh]">
                 <Image
                   src={src}
-                  alt={`Goa view ${i + 1}`}
+                  alt={`${destination} view ${i + 1}`}
                   fill
                   className="object-cover brightness-[0.90]"
                   priority={i === 0}
@@ -58,7 +70,7 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          Discover the Soul of Goa — Sun, Sand & Serenity
+          {heading}
         </motion.h1>
 
         <motion.p
@@ -68,8 +80,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.1 }}
           viewport={{ once: true }}
         >
-          Goa Awaits — Where Every Sunset Tells a Story. Feel the Breeze, Taste
-          the Sea, Love Goa.
+          {subheading}
         </motion.p>
 
         <motion.div
@@ -79,12 +90,12 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <Link href="/contact">
+          <Link href={`/${destination}/contact`}>
             <Button className="bg-primary text-primary-foreground hover:bg-white hover:text-black cursor-pointer">
               Book Your Trip
             </Button>
           </Link>
-          <Link href="/gallery">
+          <Link href={`/${destination}/gallery`}>
             <Button className="border-white bg-white text-black hover:bg-primary cursor-pointer hover:text-white">
               Explore Gallery
             </Button>

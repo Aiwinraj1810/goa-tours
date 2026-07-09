@@ -1,142 +1,125 @@
 "use client";
 
-import Hero from "@/components/hero";
-import FeaturedDestinations from "@/components/featured-destinations";
-import FloatingBookNow from "@/components/floating-book-now";
-import TourPackages from "@/components/tour-packages";
-import { ClientCarousel } from "@/components/ui/client-carousel";
-import Highlights from "@/components/testimonials";
-import VideoBlock from "@/components/video-block";
-import CtaBanner from "@/components/cta-banner";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { destinations } from "@/lib/destinations";
 
-export default function HomePage() {
-  const highlights = [
-    {
-      id: "fontainhas-1",
-      title: "Fontainhas Walk",
-      desc:
-        "Stroll through Goa's Latin quarter with pastel homes, heritage lanes, and old-world charm.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-bom-jesus_x2ywr2.jpg",
-    },
-    {
-      id: "spice-plantation-1",
-      title: "Spice Plantation Tour",
-      desc:
-        "Discover the aromas and stories behind Goa's spice farms with a relaxed local lunch.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-anjuna_f4fecx.jpg",
-    },
-    {
-      id: "divar-island-1",
-      title: "Divar Island Escape",
-      desc:
-        "Slow down with ferry rides, quiet village roads, and river views away from the beach crowds.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-chapora_rnpimr.jpg",
-    },
-    {
-      id: "fontainhas-2",
-      title: "Fontainhas Walk",
-      desc:
-        "Stroll through Goa's Latin quarter with pastel homes, heritage lanes, and old-world charm.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-bom-jesus_x2ywr2.jpg",
-    },
-    {
-      id: "spice-plantation-2",
-      title: "Spice Plantation Tour",
-      desc:
-        "Discover the aromas and stories behind Goa's spice farms with a relaxed local lunch.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-anjuna_f4fecx.jpg",
-    },
-    {
-      id: "divar-island-2",
-      title: "Divar Island Escape",
-      desc:
-        "Slow down with ferry rides, quiet village roads, and river views away from the beach crowds.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-chapora_rnpimr.jpg",
-    },
-    {
-      id: "fontainhas-3",
-      title: "Fontainhas Walk",
-      desc:
-        "Stroll through Goa's Latin quarter with pastel homes, heritage lanes, and old-world charm.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-bom-jesus_x2ywr2.jpg",
-    },
-    {
-      id: "spice-plantation-3",
-      title: "Spice Plantation Tour",
-      desc:
-        "Discover the aromas and stories behind Goa's spice farms with a relaxed local lunch.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-anjuna_f4fecx.jpg",
-    },
-    {
-      id: "divar-island-3",
-      title: "Divar Island Escape",
-      desc:
-        "Slow down with ferry rides, quiet village roads, and river views away from the beach crowds.",
-      img: "https://res.cloudinary.com/dur23cis9/image/upload/v1760680038/dest-chapora_rnpimr.jpg",
-    },
-  ];
+const panels = [
+  {
+    slug: "goa",
+    label: "Goa",
+    tagline: "Sun, Sand & Serenity",
+    cover: destinations.goa.coverImage,
+    accent: "#fb923c",
+  },
+  {
+    slug: "kerala",
+    label: "Kerala",
+    tagline: "God's Own Country",
+    cover: destinations.kerala.coverImage,
+    accent: "#22c55e",
+  },
+];
 
-  const testimonials = [
-    {
-      name: "Aarav Mehta",
-      title: "Mumbai, India",
-      avatar:
-        "https://res.cloudinary.com/dur23cis9/image/upload/v1760783456/traveler-1_yhldzc.jpg",
-      text: "Real Goa Holidays made our anniversary trip unforgettable! From private beach dinners to a perfectly planned waterfall trek, every moment felt curated just for us. The team checked in regularly and made sure we experienced the true charm of Goa beyond the usual tourist spots.",
-    },
-    {
-      name: "Sophie & Daniel Wright",
-      title: "London, UK",
-      avatar:
-        "https://res.cloudinary.com/dur23cis9/image/upload/v1760783456/traveler-2_zgqjpd.jpg",
-      text: "We had the most amazing 5 days exploring Goa with Real Goa Holidays! The local guide took us to hidden churches, spice farms, and the best seafood shacks. Everything from transfers to accommodations was seamless. Truly a world-class experience with a local touch.",
-    },
-    {
-      name: "Priya Sharma",
-      title: "Bengaluru, India",
-      avatar:
-        "https://res.cloudinary.com/dur23cis9/image/upload/v1760783456/traveler-3_rv5oxf.jpg",
-      text: "Booked a last-minute weekend getaway through Real Goa Holidays and it was flawless! They arranged everything in hours, from a cozy boutique resort in Anjuna to scooter rentals and sunset cruises. Highly recommend their service if you want a stress-free Goan escape.",
-    },
-    {
-      name: "Lucas Fernandez",
-      title: "Lisbon, Portugal",
-      avatar:
-        "https://res.cloudinary.com/dur23cis9/image/upload/v1760783456/traveler-4_xd9x3q.jpg",
-      text: "Goa was always on my bucket list, and Real Goa Holidays brought it to life. The cultural tour of Old Goa, the beach vibes, and the food trail were simply incredible. Their team goes beyond expectations, you truly feel like you are traveling with friends who know every hidden gem.",
-    },
-  ];
+export default function SplitLandingPage() {
+  const [hovered, setHovered] = useState<string | null>(null);
 
   return (
-    <>
-      <Hero />
-      <TourPackages />
-      <hr />
-      <FeaturedDestinations />
-      <VideoBlock src="https://res.cloudinary.com/dur23cis9/video/upload/v1776871803/samples/Goa-tours/website-final_gmhsxf.webm" />
-      <Highlights items={highlights} />
-      <section aria-labelledby="clients-heading" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-0 lg:px-4">
-          <div className="text-center mb-12">
-            <h2
-              id="clients-heading"
-              className="text-3xl font-bold text-gray-800 mb-4 text-pretty"
-            >
-              Memories That Stay with You
-            </h2>
+    <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden">
+      {panels.map((panel) => {
+        const isHovered = hovered === panel.slug;
+        const isOtherHovered = hovered !== null && hovered !== panel.slug;
 
-            <p className="text-gray-600 px-5 lg:px-0">
-              Memories made, moments cherished, here&apos;s what travelers say
-              about Real Goa Holidays.
-            </p>
-          </div>
-          <ClientCarousel testimonials={testimonials} />
-        </div>
-      </section>
+        return (
+          <motion.div
+            key={panel.slug}
+            className="relative flex-1 overflow-hidden cursor-pointer"
+            animate={{
+              flex: isHovered ? 1.35 : isOtherHovered ? 0.65 : 1,
+            }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+            onMouseEnter={() => setHovered(panel.slug)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            <Link href={`/${panel.slug}`} className="block h-full w-full">
+              {/* Background image */}
+              <motion.div
+                className="absolute inset-0"
+                animate={{ scale: isHovered ? 1.05 : 1 }}
+                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <Image
+                  src={panel.cover}
+                  alt={panel.label}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </motion.div>
 
-      <CtaBanner />
+              {/* Dark overlay */}
+              <motion.div
+                className="absolute inset-0 bg-black"
+                animate={{ opacity: isHovered ? 0.35 : 0.55 }}
+                transition={{ duration: 0.4 }}
+              />
 
-      <FloatingBookNow />
-    </>
+              {/* Vertical divider line (only between panels, hidden on mobile) */}
+              {panel.slug === "goa" && (
+                <div className="absolute right-0 top-0 h-full w-px bg-white/20 z-10 hidden md:block" />
+              )}
+
+              {/* Content */}
+              <div className="relative z-10 h-full flex flex-col items-center justify-center text-white px-8 text-center">
+                <motion.p
+                  className="text-xs uppercase tracking-[0.25em] text-white/60 mb-3"
+                  animate={{ opacity: isHovered ? 1 : 0.7 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Explore
+                </motion.p>
+
+                <motion.h2
+                  className="text-5xl md:text-7xl font-bold leading-none mb-3"
+                  animate={{ y: isHovered ? -4 : 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {panel.label}
+                </motion.h2>
+
+                <motion.p
+                  className="text-sm md:text-base text-white/70 tracking-wide"
+                  animate={{ opacity: isHovered ? 1 : 0.6 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {panel.tagline}
+                </motion.p>
+
+                <motion.div
+                  className="mt-8 flex items-center gap-2 text-sm font-medium"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 8 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ color: panel.accent }}
+                >
+                  Discover {panel.label}
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </div>
+            </Link>
+          </motion.div>
+        );
+      })}
+
+      {/* Branding overlay at top */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 text-white text-center pointer-events-none">
+        <p className="text-xs uppercase tracking-[0.3em] text-white/50">
+          Real Goa Holidays
+        </p>
+      </div>
+    </div>
   );
 }
