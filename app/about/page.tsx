@@ -1,3 +1,5 @@
+import { getPublishedPageBySlug } from "@/lib/cms";
+import { BlockRenderer } from "@/components/block-renderer";
 import CommonContainer from "@/components/CommonConatiner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Compass, Users, Heart } from "lucide-react";
@@ -35,7 +37,18 @@ const testimonials = [
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const cmsPage = await getPublishedPageBySlug("about").catch(() => null);
+  if (cmsPage && cmsPage.blocks.length > 0) {
+    return (
+      <>
+        {cmsPage.blocks.map((block) => (
+          <BlockRenderer key={block.id} block={block} />
+        ))}
+      </>
+    );
+  }
+
   return (
     <>
       <CommonContainer>

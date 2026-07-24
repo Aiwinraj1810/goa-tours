@@ -41,12 +41,46 @@ export type GalleryImage = {
   alt: string;
 };
 
+export type Activity = {
+  title: string;
+  description: string;
+  image: string;
+};
+
+export type Place = {
+  name: string;
+  description?: string;
+  images: string[];
+};
+
+export type District = {
+  name: string;
+  places: Place[];
+};
+
+export type TransportEntry = {
+  name: string;
+  location: string;
+  mapEmbedUrl: string;
+  description: string;
+};
+
+export type ClimateEntry = {
+  period: string;
+  summary: string;
+  description: string;
+};
+
 export type DestinationContent = {
   hero: {
     heading: string;
     subheading: string;
-    videoSrc?: string;
+    images?: string[];
   };
+  activities: Activity[];
+  districts: District[];
+  transport?: TransportEntry[];
+  climate: ClimateEntry[];
   highlights: Highlight[];
   testimonials: Testimonial[];
   gallery: GalleryImage[];

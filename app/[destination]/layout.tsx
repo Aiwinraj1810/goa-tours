@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getDestination, isValidDestination } from "@/lib/destinations";
 
@@ -26,8 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DestinationLayout({ children, params }: Props) {
-  const { destination } = await params;
-  if (!isValidDestination(destination)) notFound();
-
+  // Non-destination segments (e.g. /faq, /about) are handled by the page component
+  // as global CMS pages — don't 404 here.
   return <>{children}</>;
 }

@@ -19,7 +19,13 @@
       "Bash(node -e \"require\\('docx'\\); console.log\\('ok'\\)\")",
       "Bash(pnpm --version)",
       "Bash(node generate-quote.mjs)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/goa)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/kerala)",
+      "Bash(curl -s http://localhost:3001/goa)",
+      "Bash(curl -s http://localhost:3001/kerala)",
+      "Bash(pkill -f \"next dev\")"
     ]
   }
 }

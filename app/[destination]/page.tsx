@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import { getDestination, isValidDestination } from "@/lib/destinations";
+import { getPublishedPageBySlug } from "@/lib/cms";
+import { BlockRenderer } from "@/components/block-renderer";
 import Hero from "@/components/hero";
-import FeaturedDestinations from "@/components/featured-destinations";
 import FloatingBookNow from "@/components/floating-book-now";
-import TourPackages from "@/components/tour-packages";
-import { ClientCarousel } from "@/components/ui/client-carousel";
-import Highlights from "@/components/testimonials";
-import VideoBlock from "@/components/video-block";
 import CtaBanner from "@/components/cta-banner";
+import ActivitiesCarousel from "@/components/activities-carousel";
+import PlacesExplorer from "@/components/places-explorer";
+import TransportSection from "@/components/transport-section";
+import ClimateSection from "@/components/climate-section";
 
 export default async function DestinationHomePage({
   params,
@@ -15,10 +16,42 @@ export default async function DestinationHomePage({
   params: Promise<{ destination: string }>;
 }) {
   const { destination } = await params;
-  if (!isValidDestination(destination)) notFound();
+
+  // Non-destination segments (e.g. /faq, /terms) are treated as global CMS pages.
+  if (!isValidDestination(destination)) {
+    const globalPage = await getPublishedPageBySlug(destination).catch(() => null);
+    if (!globalPage || globalPage.blocks.length === 0) notFound();
+    return (
+      <>
+        {globalPage.blocks.map((block) => (
+          <BlockRenderer key={block.id} block={block} />
+        ))}
+      </>
+    );
+  }
 
   const dest = getDestination(destination)!;
-  const { content, packages, label } = dest;
+  const { content, label } = dest;
+
+  // Use CMS blocks when a published page exists for this destination slug.
+  // Falls back to hardcoded content when no CMS page is found.
+  const cmsPage = await getPublishedPageBySlug(destination).catch(() => null);
+
+  if (cmsPage && cmsPage.blocks.length > 0) {
+    return (
+      <>
+        {cmsPage.blocks.map((block) => (
+          <BlockRenderer
+            key={block.id}
+            block={block}
+            destination={destination}
+            destinationLabel={label}
+          />
+        ))}
+        <FloatingBookNow destination={destination} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -26,35 +59,26 @@ export default async function DestinationHomePage({
         destination={destination}
         heading={content.hero.heading}
         subheading={content.hero.subheading}
+        images={content.hero.images}
       />
-      <TourPackages
-        packages={packages}
-        destination={destination}
+      <ActivitiesCarousel
+        activities={content.activities}
         destinationLabel={label}
       />
-      <hr />
-      <FeaturedDestinations />
-      {content.hero.videoSrc && (
-        <VideoBlock src={content.hero.videoSrc} />
+      <PlacesExplorer
+        districts={content.districts}
+        destinationLabel={label}
+      />
+      {content.transport && content.transport.length > 0 && (
+        <TransportSection
+          transport={content.transport}
+          destinationLabel={label}
+        />
       )}
-      <Highlights items={content.highlights} />
-      <section aria-labelledby="clients-heading" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-0 lg:px-4">
-          <div className="text-center mb-12">
-            <h2
-              id="clients-heading"
-              className="text-3xl font-bold text-gray-800 mb-4 text-pretty"
-            >
-              Memories That Stay with You
-            </h2>
-            <p className="text-gray-600 px-5 lg:px-0">
-              Memories made, moments cherished — here&apos;s what travellers say
-              about Real Goa Holidays.
-            </p>
-          </div>
-          <ClientCarousel testimonials={content.testimonials} />
-        </div>
-      </section>
+      <ClimateSection
+        climate={content.climate}
+        destinationLabel={label}
+      />
       <CtaBanner destination={destination} destinationLabel={label} />
       <FloatingBookNow destination={destination} />
     </>

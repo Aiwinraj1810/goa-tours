@@ -21,15 +21,16 @@ type HeroProps = {
   destination: string;
   heading: string;
   subheading: string;
-  images?: string[];
+  images?: string[] | null;
 };
 
 export default function Hero({
   destination,
   heading,
   subheading,
-  images = defaultImages,
+  images,
 }: HeroProps) {
+  const heroImages = images ?? defaultImages;
   return (
     <section
       className="relative isolate overflow-hidden h-[100svh] w-full bg-background"
@@ -46,7 +47,7 @@ export default function Hero({
           className="h-full w-full"
         >
           <CarouselContent>
-            {images.map((src, i) => (
+            {heroImages.map((src, i) => (
               <CarouselItem key={i} className="relative h-[100svh]">
                 <Image
                   src={src}
