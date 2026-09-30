@@ -33,13 +33,15 @@ export default function ActivitiesCarousel({ activities, destinationLabel }: Pro
               className="pl-4 basis-[85%] md:basis-[45%] lg:basis-[30%]"
             >
               <div className="overflow-hidden rounded-2xl border border-border/40 bg-card shadow-sm h-full flex flex-col">
-                <div className="relative aspect-[4/3] shrink-0">
-                  <Image
-                    src={activity.image}
-                    alt={activity.title}
-                    fill
-                    className="object-cover"
-                  />
+                <div className="relative aspect-[4/3] shrink-0 bg-muted">
+                  {activity.image && (
+                    <Image
+                      src={activity.image}
+                      alt={activity.title}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
                 </div>
                 <div className="p-5 flex flex-col flex-1">
                   <h3 className="text-base font-semibold text-foreground mb-2">
