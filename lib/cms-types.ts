@@ -13,9 +13,18 @@ import type {
 export type HeroBlock = {
   id: string;
   type: "hero";
+  badge: string;
   heading: string;
   subheading: string;
+  locationLabel: string;
   images: string[];
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+  ribbonText: string;
+  ribbonCtaLabel: string;
+  ribbonCtaHref: string;
 };
 
 export type ActivitiesBlock = {
@@ -45,6 +54,7 @@ export type ClimateBlock = {
 export type TestimonialsBlock = {
   id: string;
   type: "testimonials";
+  heading: string;
   testimonials: Testimonial[];
 };
 
@@ -76,6 +86,7 @@ export type TourPackageItem = {
   duration: string;
   price: string;
   badge: string;
+  note: string;
 };
 
 export type TourPackagesBlock = {
@@ -89,6 +100,7 @@ export type TourPackagesBlock = {
 export type DestinationTile = {
   image: string;
   name: string;
+  subtitle: string;
   href: string;
 };
 
@@ -96,9 +108,12 @@ export type DestinationHighlightBlock = {
   id: string;
   type: "destinationHighlight";
   bannerImage: string;
+  bannerBadge: string;
+  bannerEyebrow: string;
   bannerTitle: string;
-  bannerSubtitle: string;
   bannerTags: string[];
+  bannerPriceLabel: string;
+  bannerNote: string;
   bannerCtaLabel: string;
   bannerCtaHref: string;
   moreHref: string;
@@ -126,17 +141,20 @@ export type EnquireBannerBlock = {
   id: string;
   type: "enquireBanner";
   image: string;
+  imageCaptionTitle: string;
+  imageCaptionSubtitle: string;
   heading: string;
   body: string;
   ratingText: string;
   ctaLabel: string;
   ctaHref: string;
-  phone: string;
+  phones: string[];
 };
 
 export type CollectionItem = {
   image: string;
   name: string;
+  description: string;
   rating: string;
   startingPrice: string;
   href: string;
@@ -163,6 +181,7 @@ export type OffersBlock = {
   id: string;
   type: "offers";
   heading: string;
+  subheading: string;
   offers: OfferItem[];
 };
 

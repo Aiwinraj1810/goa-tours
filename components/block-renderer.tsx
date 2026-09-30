@@ -28,9 +28,18 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
       return (
         <Hero
           destination={destination}
+          badge={block.badge}
           heading={block.heading}
           subheading={block.subheading}
+          locationLabel={block.locationLabel}
           images={block.images.length > 0 ? block.images : undefined}
+          primaryCtaLabel={block.primaryCtaLabel}
+          primaryCtaHref={block.primaryCtaHref}
+          secondaryCtaLabel={block.secondaryCtaLabel}
+          secondaryCtaHref={block.secondaryCtaHref}
+          ribbonText={block.ribbonText}
+          ribbonCtaLabel={block.ribbonCtaLabel}
+          ribbonCtaHref={block.ribbonCtaHref}
         />
       );
 
@@ -70,7 +79,10 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
     case "testimonials":
       if (block.testimonials.length === 0) return null;
       return (
-        <section className="py-16 px-4">
+        <section className="bg-navy px-4 py-16 text-navy-foreground">
+          <h2 className="mb-10 text-center text-3xl font-semibold md:text-4xl">
+            {block.heading || "What Our Travelers Say"}
+          </h2>
           <ClientCarousel testimonials={block.testimonials} />
         </section>
       );
@@ -105,9 +117,12 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
       return (
         <DestinationHighlight
           bannerImage={block.bannerImage}
+          bannerBadge={block.bannerBadge}
+          bannerEyebrow={block.bannerEyebrow}
           bannerTitle={block.bannerTitle}
-          bannerSubtitle={block.bannerSubtitle}
           bannerTags={block.bannerTags}
+          bannerPriceLabel={block.bannerPriceLabel}
+          bannerNote={block.bannerNote}
           bannerCtaLabel={block.bannerCtaLabel}
           bannerCtaHref={block.bannerCtaHref}
           moreHref={block.moreHref}
@@ -134,12 +149,14 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
       return (
         <EnquireBanner
           image={block.image}
+          imageCaptionTitle={block.imageCaptionTitle}
+          imageCaptionSubtitle={block.imageCaptionSubtitle}
           heading={block.heading}
           body={block.body}
           ratingText={block.ratingText}
           ctaLabel={block.ctaLabel}
           ctaHref={block.ctaHref}
-          phone={block.phone}
+          phones={block.phones}
         />
       );
 
@@ -149,7 +166,9 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
 
     case "offers":
       if (block.offers.length === 0) return null;
-      return <OffersGrid heading={block.heading} offers={block.offers} />;
+      return (
+        <OffersGrid heading={block.heading} subheading={block.subheading} offers={block.offers} />
+      );
 
     case "faq":
       if (block.items.length === 0) return null;

@@ -31,15 +31,16 @@ export default function FaqAccordion({ heading, subheading, items }: FaqAccordio
         ) : null}
       </div>
 
-      <Accordion type="single" collapsible className="mt-10 grid gap-3 md:grid-cols-2">
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue="faq-0"
+        className="mt-10 grid gap-x-10 md:grid-cols-2"
+      >
         {items.map((item, i) => (
-          <AccordionItem
-            key={i}
-            value={`faq-${i}`}
-            className="rounded-2xl border border-border bg-card px-5"
-          >
-            <AccordionTrigger className="gap-4">
-              <span className="flex items-center gap-3">
+          <AccordionItem key={i} value={`faq-${i}`} className="border-b border-border">
+            <AccordionTrigger className="gap-4 py-5 hover:no-underline">
+              <span className="flex items-center gap-3 text-base font-medium">
                 <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
                   {i + 1}
                 </span>

@@ -5,6 +5,7 @@ import { Star } from "lucide-react";
 type CollectionItem = {
   image: string;
   name: string;
+  description: string;
   rating: string;
   startingPrice: string;
   href: string;
@@ -30,17 +31,18 @@ export default function CollectionsGrid({ heading, items }: CollectionsGridProps
                 fill
                 className="object-cover transition-transform group-hover:scale-105"
               />
+              {item.rating ? (
+                <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-foreground">
+                  <Star className="size-3 fill-highlight text-highlight" />
+                  {item.rating}
+                </span>
+              ) : null}
             </div>
             <div className="mt-3 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-foreground">{item.name}</span>
-                {item.rating ? (
-                  <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Star className="size-4 fill-highlight text-highlight" />
-                    {item.rating}
-                  </span>
-                ) : null}
-              </div>
+              <span className="font-semibold text-foreground">{item.name}</span>
+              {item.description ? (
+                <p className="text-sm text-muted-foreground">{item.description}</p>
+              ) : null}
               {item.startingPrice ? (
                 <p className="text-sm text-muted-foreground">
                   Starting per person{" "}

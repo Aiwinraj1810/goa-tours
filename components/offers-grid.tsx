@@ -15,13 +15,15 @@ type OfferItem = {
 
 type OffersGridProps = {
   heading: string;
+  subheading: string;
   offers: OfferItem[];
 };
 
-export default function OffersGrid({ heading, offers }: OffersGridProps) {
+export default function OffersGrid({ heading, subheading, offers }: OffersGridProps) {
   return (
     <section className="mx-auto max-w-7xl px-5 py-16">
       <h2 className="text-3xl font-semibold text-foreground md:text-4xl">{heading}</h2>
+      {subheading ? <p className="mt-2 text-muted-foreground">{subheading}</p> : null}
 
       <div className="mt-8 grid gap-5 md:grid-cols-2">
         {offers.map((offer, i) => (
@@ -31,15 +33,15 @@ export default function OffersGrid({ heading, offers }: OffersGridProps) {
           >
             <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-2xl">
               <Image src={offer.image} alt={offer.title} fill className="object-cover" />
+              {offer.badge ? (
+                <span className="absolute left-2 top-2 rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold text-accent-foreground">
+                  {offer.badge}
+                </span>
+              ) : null}
             </div>
             <div className="flex flex-1 flex-col justify-between">
               <div>
-                {offer.badge ? (
-                  <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-                    {offer.badge}
-                  </span>
-                ) : null}
-                <h3 className="mt-2 font-semibold text-foreground">{offer.title}</h3>
+                <h3 className="font-semibold text-foreground">{offer.title}</h3>
                 <p className="text-sm text-muted-foreground">{offer.subtitle}</p>
               </div>
               <div className="mt-2 flex items-center justify-between">
