@@ -69,6 +69,116 @@ export type RichTextBlock = {
   body: string;
 };
 
+export type TourPackageItem = {
+  image: string;
+  title: string;
+  location: string;
+  duration: string;
+  price: string;
+  badge: string;
+};
+
+export type TourPackagesBlock = {
+  id: string;
+  type: "tourPackages";
+  heading: string;
+  moreHref: string;
+  packages: TourPackageItem[];
+};
+
+export type DestinationTile = {
+  image: string;
+  name: string;
+  href: string;
+};
+
+export type DestinationHighlightBlock = {
+  id: string;
+  type: "destinationHighlight";
+  bannerImage: string;
+  bannerTitle: string;
+  bannerSubtitle: string;
+  bannerTags: string[];
+  bannerCtaLabel: string;
+  bannerCtaHref: string;
+  moreHref: string;
+  tiles: DestinationTile[];
+};
+
+export type FeatureItem = {
+  icon: string;
+  label: string;
+};
+
+export type FeaturesBlock = {
+  id: string;
+  type: "features";
+  heading: string;
+  subheading: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+  features: FeatureItem[];
+};
+
+export type EnquireBannerBlock = {
+  id: string;
+  type: "enquireBanner";
+  image: string;
+  heading: string;
+  body: string;
+  ratingText: string;
+  ctaLabel: string;
+  ctaHref: string;
+  phone: string;
+};
+
+export type CollectionItem = {
+  image: string;
+  name: string;
+  rating: string;
+  startingPrice: string;
+  href: string;
+};
+
+export type CollectionsBlock = {
+  id: string;
+  type: "collections";
+  heading: string;
+  items: CollectionItem[];
+};
+
+export type OfferItem = {
+  image: string;
+  badge: string;
+  title: string;
+  subtitle: string;
+  ctaLabel: string;
+  ctaHref: string;
+  validity: string;
+};
+
+export type OffersBlock = {
+  id: string;
+  type: "offers";
+  heading: string;
+  offers: OfferItem[];
+};
+
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type FaqBlock = {
+  id: string;
+  type: "faq";
+  heading: string;
+  subheading: string;
+  items: FaqItem[];
+};
+
 export type Block =
   | HeroBlock
   | ActivitiesBlock
@@ -78,7 +188,14 @@ export type Block =
   | TestimonialsBlock
   | GalleryBlock
   | CtaBlock
-  | RichTextBlock;
+  | RichTextBlock
+  | TourPackagesBlock
+  | DestinationHighlightBlock
+  | FeaturesBlock
+  | EnquireBannerBlock
+  | CollectionsBlock
+  | OffersBlock
+  | FaqBlock;
 
 export type CmsPackage = {
   _id: string;
@@ -104,4 +221,42 @@ export type CmsPage = {
   seoDescription?: string;
   blocks: Block[];
   publishedAt?: string | null;
+};
+
+export type NavItem = {
+  label: string;
+  href: string;
+};
+
+export type NavGroup = {
+  label: string;
+  href?: string;
+  children: NavItem[];
+};
+
+export type FooterLinkColumn = {
+  heading: string;
+  links: NavItem[];
+};
+
+export type SocialLink = {
+  label: string;
+  href: string;
+};
+
+export type CmsSiteSettings = {
+  siteName: string;
+  logo?: string;
+  navGroups: NavGroup[];
+  buyPackagesLabel: string;
+  buyPackagesHref: string;
+  footerText: string;
+  footerColumns: FooterLinkColumn[];
+  newsletterHeading: string;
+  newsletterSubheading: string;
+  address: string;
+  phones: string[];
+  email: string;
+  socialLinks: SocialLink[];
+  footerMapEmbedUrl: string;
 };

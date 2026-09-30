@@ -1,12 +1,15 @@
 import "server-only";
 
 import { getDb } from "@/lib/db";
-import type { CmsPackage, CmsPage } from "@/lib/cms-types";
+import type { CmsPackage, CmsPage, CmsSiteSettings } from "@/lib/cms-types";
 
 const COLLECTIONS = {
   pages: "pages",
   packages: "packages",
+  siteSettings: "siteSettings",
 } as const;
+
+const SITE_SETTINGS_ID = "site-settings";
 
 export async function getPublishedPageBySlug(
   slug: string,
@@ -38,6 +41,18 @@ export async function getPublishedPackagesByDestination(destination: string): Pr
     ...doc,
     _id: doc._id.toString(),
   })) as CmsPackage[];
+}
+
+export async function getSiteSettings(): Promise<CmsSiteSettings | null> {
+  const db = await getDb();
+  const doc = await db
+    .collection<CmsSiteSettings & { _id: string; updatedAt: string }>(COLLECTIONS.siteSettings)
+    .findOne({ _id: SITE_SETTINGS_ID });
+
+  if (!doc) return null;
+
+  const { _id, updatedAt, ...settings } = doc;
+  return settings as CmsSiteSettings;
 }
 
 export async function getPublishedPackageBySlug(
