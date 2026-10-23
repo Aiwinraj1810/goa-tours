@@ -45,6 +45,10 @@
   --chart-5: #f59e0b;
 
   --radius: 0.75rem;
+
+  /* fluid layout scale — see "Layout primitives" below */
+  --gutter: clamp(1.25rem, 4.5vw, 5rem);
+  --section-y: clamp(4.5rem, 9vw, 9rem);
   --sidebar: #f6f1e7;
   --sidebar-foreground: #17152e;
   --sidebar-primary: #3d3480;
@@ -107,7 +111,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-bricolage);
   --font-mono: var(--font-geist-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -160,5 +164,68 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+
+/* ── Layout primitives ─────────────────────────────────────────────────────
+   Replace the old "max-w-7xl mx-auto px-5" container. Sections choose their
+   own width; these keep gutters and rhythm consistent. */
+@utility gutter {
+  padding-inline: var(--gutter);
+}
+@utility section-y {
+  padding-block: var(--section-y);
+}
+/* readable line length for running text, independent of section width */
+@utility measure {
+  max-width: 58ch;
+}
+/* cap for dense, full-width content so it never sprawls on ultra-wide screens */
+@utility wide {
+  max-width: 120rem;
+  margin-inline: auto;
+}
+
+/* ── Fluid type ──────────────────────────────────────────────────────────── */
+@utility text-display {
+  font-size: clamp(2.75rem, 8vw, 7.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+@utility text-headline {
+  font-size: clamp(2.1rem, 5vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+@utility text-title {
+  font-size: clamp(1.35rem, 2.3vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+@utility eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* never allow accidental horizontal page scroll from full-bleed compositions */
+html,
+body {
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

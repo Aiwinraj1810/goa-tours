@@ -1,88 +1,53 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+
+import Reveal from "@/components/reveal";
 import type { ItineraryDay } from "@/lib/packages";
 
+// A vertical travel journal: a quiet line connects each day. Day images, when
+// the package has them, sit inline so they work on touch devices too.
 export default function ItineraryTimeline({ items }: { items: ItineraryDay[] }) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [animated, setAnimated] = useState(false);
-  const olRef = useRef<HTMLOListElement>(null);
-
-  useEffect(() => {
-    const el = olRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setAnimated(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <ol ref={olRef} className="relative border-l border-gray-200 mb-10">
-      {items.map((item, i) => (
-        <li
-          key={i}
-          className="mb-8  last:mb-0 relative"
-          style={{ zIndex: hoveredIndex === i ? 10 : "auto" }}
-        >
-          <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold ring-4 ring-white">
-            {i + 1}
-          </span>
-
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-1 ml-4">
-            {item.day}
-          </p>
-
-          {/* Title with animated underline and hover image popup */}
-          <div
-            className="relative inline-block mb-1 cursor-default ml-4"
-            onMouseEnter={() => setHoveredIndex(i)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            <h3 className="text-base font-semibold text-foreground">
-              {item.title}
-            </h3>
-
-            {/* Underline — only for items with an image */}
-            {item.image && (
+    <ol>
+      {items.map((item, i) => {
+        const isLast = i === items.length - 1;
+        return (
+          <li key={i} className="relative pl-9 md:pl-14">
+            {!isLast ? (
               <span
-                className="absolute bottom-0 left-0 h-[2px] bg-primary transition-[width] ease-out"
-                style={{
-                  width: animated ? "100%" : "0%",
-                  transitionDuration: "600ms",
-                  transitionDelay: animated ? `${i * 180}ms` : "0ms",
-                }}
+                aria-hidden
+                className="absolute bottom-0 left-[0.4375rem] top-[1.375rem] w-px bg-border"
               />
-            )}
+            ) : null}
+            <span
+              aria-hidden
+              className="absolute left-0 top-[0.4375rem] size-3.5 rounded-full border-2 border-primary bg-background"
+            />
 
-            {/* Hover image popup — desktop only */}
-            {hoveredIndex === i && item.image && (
-              <div className="hidden md:block absolute left-full top-1/2 -translate-y-1/2 ml-4 z-20 w-52 rounded-xl overflow-hidden shadow-2xl pointer-events-none">
-                <div className="relative h-36 w-full">
+            <Reveal className={isLast ? "" : "pb-12 md:pb-14"}>
+              {item.day ? <p className="eyebrow text-primary">{item.day}</p> : null}
+              {item.title ? (
+                <h3 className="text-title mt-2 text-balance text-foreground">{item.title}</h3>
+              ) : null}
+              {item.description ? (
+                <p className="measure mt-3 text-muted-foreground md:text-lg">
+                  {item.description}
+                </p>
+              ) : null}
+              {item.image ? (
+                <div className="relative mt-6 aspect-[16/9] w-full max-w-xl overflow-hidden rounded-2xl bg-secondary">
                   <Image
                     src={item.image}
-                    alt={item.title}
+                    alt={item.title || item.day}
                     fill
+                    sizes="(min-width: 1024px) 36rem, 100vw"
                     className="object-cover"
                   />
                 </div>
-              </div>
-            )}
-          </div>
-
-          <p className="text-sm text-muted-foreground leading-relaxed ml-4">
-            {item.description}
-          </p>
-        </li>
-      ))}
+              ) : null}
+            </Reveal>
+          </li>
+        );
+      })}
     </ol>
   );
 }

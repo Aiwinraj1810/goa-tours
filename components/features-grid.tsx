@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import Reveal from "@/components/reveal";
 import { resolveIcon } from "@/components/icon-map";
 
 type FeatureItem = {
@@ -28,48 +29,55 @@ export default function FeaturesGrid({
   features,
 }: FeaturesGridProps) {
   return (
-    <section className="bg-navy py-16 text-navy-foreground">
-      <div className="mx-auto max-w-7xl px-5 text-center">
-        <h2 className="text-3xl font-semibold md:text-4xl">{heading}</h2>
-        {subheading ? (
-          <p className="mx-auto mt-3 max-w-2xl text-navy-foreground/70">{subheading}</p>
-        ) : null}
-
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          {primaryCtaLabel ? (
-            <Link href={primaryCtaHref}>
-              <Button className="bg-navy-foreground text-navy hover:opacity-90">
-                {primaryCtaLabel}
-              </Button>
-            </Link>
+    <section className="section-y bg-navy text-navy-foreground">
+      <div className="gutter wide grid gap-14 lg:grid-cols-12 lg:gap-10">
+        {/* Statement */}
+        <Reveal className="lg:col-span-6">
+          <h2 className="text-headline max-w-2xl text-balance">{heading}</h2>
+          {subheading ? (
+            <p className="measure mt-6 text-lg text-navy-foreground/70">{subheading}</p>
           ) : null}
-          {secondaryCtaLabel ? (
-            <Link href={secondaryCtaHref}>
-              <Button
-                variant="outline"
-                className="border-navy-foreground/30 bg-transparent text-navy-foreground hover:bg-navy-foreground/10"
+
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            {primaryCtaLabel ? (
+              <Link
+                href={primaryCtaHref}
+                className="group inline-flex h-12 items-center gap-2 rounded-full bg-navy-foreground px-7 text-sm font-medium text-navy transition-opacity hover:opacity-90"
+              >
+                {primaryCtaLabel}
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            ) : null}
+            {secondaryCtaLabel ? (
+              <Link
+                href={secondaryCtaHref}
+                className="border-b border-navy-foreground/40 pb-1 text-sm font-medium transition-colors hover:border-navy-foreground"
               >
                 {secondaryCtaLabel}
-              </Button>
-            </Link>
-          ) : null}
-        </div>
+              </Link>
+            ) : null}
+          </div>
+        </Reveal>
 
-        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3">
+        {/* Benefits as an editorial ledger */}
+        <ul className="grid gap-x-10 sm:grid-cols-2 lg:col-span-6 lg:col-start-7">
           {features.map((feature, i) => {
             const Icon = resolveIcon(feature.icon);
             return (
-              <div key={i} className="flex flex-col items-center gap-3">
-                <span className="flex size-14 items-center justify-center rounded-full bg-navy-foreground/10">
-                  <Icon className="size-6 text-navy-foreground" />
-                </span>
-                <span className="text-sm font-medium text-navy-foreground/90">
-                  {feature.label}
-                </span>
-              </div>
+              <li key={i}>
+                <Reveal delay={(i % 2) * 0.08}>
+                  <div className="group flex items-center gap-5 border-t border-navy-foreground/15 py-6">
+                    <Icon
+                      className="size-6 shrink-0 text-navy-foreground/60 transition-colors group-hover:text-navy-foreground"
+                      strokeWidth={1.4}
+                    />
+                    <span className="text-lg font-medium">{feature.label}</span>
+                  </div>
+                </Reveal>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );

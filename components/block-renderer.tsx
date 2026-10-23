@@ -14,7 +14,7 @@ import OffersGrid from "@/components/offers-grid";
 import PlacesExplorer from "@/components/places-explorer";
 import TourPackagesGrid from "@/components/tour-packages-grid";
 import TransportSection from "@/components/transport-section";
-import { ClientCarousel } from "@/components/ui/client-carousel";
+import TestimonialsQuote from "@/components/testimonials-quote";
 
 type Props = {
   block: Block;
@@ -32,6 +32,7 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
           heading={block.heading}
           subheading={block.subheading}
           locationLabel={block.locationLabel}
+          bestTime={block.bestTime}
           images={block.images.length > 0 ? block.images : undefined}
           primaryCtaLabel={block.primaryCtaLabel}
           primaryCtaHref={block.primaryCtaHref}
@@ -79,12 +80,10 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
     case "testimonials":
       if (block.testimonials.length === 0) return null;
       return (
-        <section className="bg-navy px-4 py-16 text-navy-foreground">
-          <h2 className="mb-10 text-center text-3xl font-semibold md:text-4xl">
-            {block.heading || "What Our Travelers Say"}
-          </h2>
-          <ClientCarousel testimonials={block.testimonials} />
-        </section>
+        <TestimonialsQuote
+          heading={block.heading || "What Our Travelers Say"}
+          testimonials={block.testimonials}
+        />
       );
 
     case "gallery":

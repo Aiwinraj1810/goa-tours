@@ -16,6 +16,7 @@ export default function FloatingBookNow({ destination }: { destination: "goa" | 
   const [phoneExpanded, setPhoneExpanded] = useState(false);
   const [bookExpanded, setBookExpanded] = useState(false);
   const [pastHero, setPastHero] = useState(false);
+  const [shown, setShown] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -28,14 +29,22 @@ export default function FloatingBookNow({ destination }: { destination: "goa" | 
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setPastHero(window.scrollY > window.innerHeight);
+    const onScroll = () => {
+      setPastHero(window.scrollY > window.innerHeight);
+      // Keep the hero clear: actions appear once the visitor is moving down the page.
+      setShown(window.scrollY > window.innerHeight * 0.6);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div
+      className={`fixed bottom-5 right-5 z-40 transition-all duration-500 md:bottom-6 md:right-6 ${
+        shown ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
+      }`}
+    >
 
       {/* Desktop: side-by-side animated pills */}
       <div className="hidden md:flex items-center gap-3">
@@ -49,13 +58,9 @@ export default function FloatingBookNow({ destination }: { destination: "goa" | 
               : "bg-white text-primary ring-primary/20"
           }`}
         >
-          <motion.span
-            animate={phoneExpanded ? { rotate: [0, -15, 15, -12, 12, -8, 8, 0] } : {}}
-            transition={{ duration: 0.7, delay: 0.5, ease: "easeInOut" }}
-            style={{ display: "inline-flex" }}
-          >
+          <span className="inline-flex">
             <Phone className="h-3.5 w-3.5 shrink-0" />
-          </motion.span>
+          </span>
           <motion.span
             className="whitespace-nowrap overflow-hidden block"
             initial={{ maxWidth: 0, opacity: 0, marginLeft: 0 }}

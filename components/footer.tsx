@@ -36,100 +36,98 @@ export default async function Footer() {
 
   return (
     <footer className="bg-navy text-navy-foreground">
-      {/* --- Newsletter strip --- */}
-      <div
-        className="relative bg-cover bg-center py-16"
-        style={{
-          backgroundImage:
-            "url('https://res.cloudinary.com/dur23cis9/image/upload/v1761149876/pexels-asadphoto-457882_11zon_c6cjij.webp')",
-        }}
-      >
-        <div className="absolute inset-0 bg-navy/85" />
-        <div className="relative mx-auto max-w-2xl px-5 text-center">
-          <h2 className="text-2xl font-semibold md:text-3xl">{newsletterHeading}</h2>
-          <p className="mt-2 text-sm text-navy-foreground/70">{newsletterSubheading}</p>
-          <form className="mx-auto mt-6 flex max-w-md gap-2">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full rounded-full border border-navy-foreground/20 bg-navy-foreground/10 px-4 py-2.5 text-sm text-navy-foreground placeholder:text-navy-foreground/50 focus:outline-none"
-            />
-            <Button type="submit" className="shrink-0 rounded-full bg-accent text-accent-foreground hover:opacity-90">
-              Subscribe
-            </Button>
-          </form>
+      {/* Newsletter */}
+      <div className="gutter wide grid gap-8 border-b border-navy-foreground/15 py-[clamp(3.5rem,7vw,6rem)] lg:grid-cols-12 lg:items-end lg:gap-16">
+        <div className="lg:col-span-7">
+          <h2 className="text-headline max-w-2xl text-balance">{newsletterHeading}</h2>
+          <p className="measure mt-4 text-navy-foreground/70">{newsletterSubheading}</p>
         </div>
+        <form className="flex items-end gap-4 lg:col-span-5">
+          <label className="sr-only" htmlFor="footer-email">
+            Email address
+          </label>
+          <input
+            id="footer-email"
+            type="email"
+            placeholder="Enter your email"
+            className="w-full border-0 border-b border-navy-foreground/40 bg-transparent py-3 text-base text-navy-foreground placeholder:text-navy-foreground/50 focus:border-navy-foreground focus:outline-none"
+          />
+          <Button
+            type="submit"
+            className="h-11 shrink-0 rounded-full bg-navy-foreground px-6 text-navy hover:opacity-90"
+          >
+            Subscribe
+          </Button>
+        </form>
       </div>
 
-      {/* --- Link columns --- */}
-      <div className="mx-auto max-w-7xl px-5 py-12">
-        <div className="grid gap-8 md:grid-cols-4">
-          <div className="space-y-3">
-            <h3 className="text-xl font-bold">Real Goa Holidays</h3>
-            <p className="text-sm text-navy-foreground/70 leading-relaxed">{footerText}</p>
-            {socialLinks.length > 0 ? (
-              <div className="flex gap-3 pt-2">
-                {socialLinks.map((social) => {
-                  const Icon = resolveSocialIcon(social.label);
-                  return (
-                    <a
-                      key={social.label}
-                      href={social.href}
-                      aria-label={social.label}
-                      className="flex size-9 items-center justify-center rounded-full bg-navy-foreground/10 hover:bg-navy-foreground/20"
-                    >
-                      <Icon className="size-4" />
-                    </a>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div>
-
-          {footerColumns.map((column) => (
-            <div key={column.heading}>
-              <h4 className="mb-3 font-semibold">{column.heading}</h4>
-              <nav className="flex flex-col gap-2 text-sm text-navy-foreground/70">
-                {column.links.map((link) => (
-                  <Link key={link.label} href={link.href} className="hover:text-navy-foreground">
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
+      {/* Brand, links, contact */}
+      <div className="gutter wide grid grid-cols-2 gap-x-6 gap-y-12 py-14 lg:grid-cols-12 lg:gap-x-10">
+        <div className="col-span-2 space-y-4 lg:col-span-4">
+          <h3 className="text-title">Real Goa Holidays</h3>
+          <p className="measure text-sm leading-relaxed text-navy-foreground/70">{footerText}</p>
+          {socialLinks.length > 0 ? (
+            <div className="flex gap-3 pt-2">
+              {socialLinks.map((social) => {
+                const Icon = resolveSocialIcon(social.label);
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    aria-label={social.label}
+                    className="flex size-10 items-center justify-center rounded-full border border-navy-foreground/25 transition-colors hover:bg-navy-foreground hover:text-navy"
+                  >
+                    <Icon className="size-4" />
+                  </a>
+                );
+              })}
             </div>
-          ))}
+          ) : null}
+        </div>
 
-          <div className="space-y-2">
-            <h4 className="mb-3 font-semibold">Contact Us</h4>
-            <p className="flex items-start gap-2 text-sm text-navy-foreground/70">
-              <MapPin className="mt-0.5 size-4 shrink-0" />
-              {address}
-            </p>
-            {phones.map((phone) => (
-              <a
-                key={phone}
-                href={`tel:${phone}`}
-                className="flex items-center gap-2 text-sm text-navy-foreground/70 hover:text-navy-foreground"
-              >
-                <Phone className="size-4" />
-                {phone}
-              </a>
-            ))}
-            {email ? (
-              <a
-                href={`mailto:${email}`}
-                className="flex items-center gap-2 text-sm text-navy-foreground/70 hover:text-navy-foreground"
-              >
-                <Mail className="size-4" />
-                {email}
-              </a>
-            ) : null}
+        {footerColumns.map((column) => (
+          <div key={column.heading} className="lg:col-span-2">
+            <h4 className="eyebrow mb-5 text-navy-foreground/60">{column.heading}</h4>
+            <nav className="flex flex-col gap-3 text-sm text-navy-foreground/80">
+              {column.links.map((link) => (
+                <Link key={link.label} href={link.href} className="transition-colors hover:text-navy-foreground">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
           </div>
+        ))}
+
+        <div className="col-span-2 space-y-3 lg:col-span-3 lg:col-start-10">
+          <h4 className="eyebrow mb-5 text-navy-foreground/60">Contact Us</h4>
+          <p className="flex items-start gap-3 text-sm text-navy-foreground/80">
+            <MapPin className="mt-0.5 size-4 shrink-0" />
+            {address}
+          </p>
+          {phones.map((phone) => (
+            <a
+              key={phone}
+              href={`tel:${phone}`}
+              className="flex items-center gap-3 text-sm text-navy-foreground/80 transition-colors hover:text-navy-foreground"
+            >
+              <Phone className="size-4" />
+              {phone}
+            </a>
+          ))}
+          {email ? (
+            <a
+              href={`mailto:${email}`}
+              className="flex items-center gap-3 text-sm text-navy-foreground/80 transition-colors hover:text-navy-foreground"
+            >
+              <Mail className="size-4" />
+              {email}
+            </a>
+          ) : null}
         </div>
       </div>
 
-      {/* --- Bottom bar --- */}
-      <div className="border-t border-navy-foreground/10 py-4 text-center text-sm text-navy-foreground/60">
+      {/* Bottom bar */}
+      <div className="gutter wide border-t border-navy-foreground/15 py-6 text-sm text-navy-foreground/60">
         © {new Date().getFullYear()} Real Goa Holidays. All rights reserved.
       </div>
     </footer>

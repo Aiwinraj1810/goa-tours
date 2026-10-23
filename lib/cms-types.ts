@@ -17,6 +17,7 @@ export type HeroBlock = {
   heading: string;
   subheading: string;
   locationLabel: string;
+  bestTime?: string;
   images: string[];
   primaryCtaLabel: string;
   primaryCtaHref: string;

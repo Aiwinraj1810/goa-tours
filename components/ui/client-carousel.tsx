@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 import { useEffect, useState } from "react";
-import { Quote } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-
+import { cn, hasPhoto } from "@/lib/utils";
 
 type Testimonial = {
   name: string;
@@ -14,19 +14,51 @@ type Testimonial = {
   text: string;
 };
 
+const AUTOPLAY_MS = 8000;
+
 function getInitials(name: string) {
   return name
-    .split(" ")
+    .split(/\s+/)
+    .filter((word) => /^\p{L}/u.test(word))
     .map((word) => word[0])
+    .slice(0, 2)
     .join("")
     .toUpperCase();
 }
+
+// Shows the supplied photograph, or initials if there is none or it fails to load.
+function Avatar({ name, src }: { name: string; src?: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!hasPhoto(src) || failed) {
+    return (
+      <span
+        aria-hidden
+        className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
+      >
+        {getInitials(name)}
+      </span>
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt=""
+      width={44}
+      height={44}
+      onError={() => setFailed(true)}
+      className="size-11 shrink-0 rounded-full object-cover"
+    />
+  );
+}
+
 type ClientCarouselProps = {
   testimonials: Testimonial[];
 };
 
 export function ClientCarousel({ testimonials }: ClientCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     slides: {
       perView: 1,
@@ -36,7 +68,7 @@ export function ClientCarousel({ testimonials }: ClientCarouselProps) {
       "(min-width: 768px)": {
         slides: {
           perView: 2,
-          spacing: 24,
+          spacing: 40,
         },
       },
     },
@@ -50,65 +82,106 @@ export function ClientCarousel({ testimonials }: ClientCarouselProps) {
   });
 
   useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(query.matches);
+  }, []);
+
+  // Advances slowly enough to read, and stops while someone is hovering,
+  // focusing or interacting with it, or if they prefer reduced motion.
+  useEffect(() => {
+    if (paused || reducedMotion) return;
     const interval = setInterval(() => {
       instanceRef.current?.next();
-    }, 6000);
+    }, AUTOPLAY_MS);
     return () => clearInterval(interval);
-  }, [instanceRef]);
+  }, [instanceRef, paused, reducedMotion]);
 
   return (
-    <div className="px-4">
-      <div 
-        ref={sliderRef} 
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
+      <div
+        ref={sliderRef}
         className="keen-slider"
         role="region"
-        aria-label="Client testimonials carousel"
-        aria-live="polite"
+        aria-roledescription="carousel"
+        aria-label="Client testimonials"
       >
         {testimonials.map((t, idx) => (
-          <div key={idx} className="keen-slider__slide flex" role="group" aria-label={`Testimonial ${idx + 1} of ${testimonials.length}`}>
-            <div className="bg-white border border-gray-200 text-black rounded-2xl p-8 shadow-sm flex flex-col justify-between w-full">
-              <Quote className="text-black h-8 w-8 mb-4" aria-hidden="true" />
-              <p className="text-lg leading-relaxed mb-6">“{t.text}”</p>
-              <div className="flex items-center gap-4 mt-auto pt-4 border-t border-gray-100">
-                {t.avatar ? (
-                  <Image
-                    src={t.avatar}
-                    alt={t.name}
-                    width={48}
-                    height={48}
-                    className="rounded-full object-contain"
-                  />
-                ) : (
-                  <div className="w-12 h-12 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center font-semibold text-sm">
-                    {getInitials(t.name)}
-                  </div>
-                )}
-                <div>
-                  <p className="font-semibold">{t.name}</p>
-                  <p className="text-sm text-gray-600">{t.title}</p>
-                </div>
-              </div>
-            </div>
+          <div
+            key={idx}
+            className="keen-slider__slide flex"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`Testimonial ${idx + 1} of ${testimonials.length}`}
+          >
+            <figure className="flex w-full flex-col border-t border-foreground/20 pt-8">
+              <blockquote className="text-[clamp(1.05rem,1.45vw,1.3rem)] leading-[1.65] text-foreground">
+                “{t.text}”
+              </blockquote>
+              <figcaption className="mt-auto flex items-center gap-4 pt-8">
+                <Avatar name={t.name} src={t.avatar} />
+                <span>
+                  <span className="block font-semibold text-foreground">{t.name}</span>
+                  {t.title ? (
+                    <span className="block text-sm text-muted-foreground">{t.title}</span>
+                  ) : null}
+                </span>
+              </figcaption>
+            </figure>
           </div>
         ))}
       </div>
 
-      {/* Dots */}
-      <div className="flex justify-center mt-6 space-x-2" role="tablist" aria-label="Testimonial carousel navigation">
-        {testimonials.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => instanceRef.current?.moveToIdx(idx)}
-            className={`w-3 h-3 rounded-full transition-colors ${
-              idx === currentSlide ? "bg-black" : "bg-gray-300"
-            }`}
-            role="tab"
-            aria-selected={idx === currentSlide}
-            aria-label={`Go to testimonial slide ${idx + 1}`}
-          />
-        ))}
-      </div>
+      {/* Quiet controls */}
+      {testimonials.length > 1 ? (
+        <div className="mt-10 flex items-center justify-between gap-6">
+          <div className="flex items-center gap-1" role="tablist" aria-label="Choose testimonial">
+            {testimonials.map((t, idx) => (
+              <button
+                key={idx}
+                type="button"
+                role="tab"
+                aria-selected={idx === currentSlide}
+                aria-label={`Show testimonial from ${t.name}`}
+                onClick={() => instanceRef.current?.moveToIdx(idx)}
+                className="group flex h-8 items-center px-1 focus-visible:outline-none"
+              >
+                <span
+                  className={cn(
+                    "block h-0.5 transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-primary group-focus-visible:ring-offset-2",
+                    idx === currentSlide
+                      ? "w-8 bg-foreground"
+                      : "w-4 bg-foreground/25 group-hover:bg-foreground/50"
+                  )}
+                />
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              aria-label="Previous testimonial"
+              onClick={() => instanceRef.current?.prev()}
+              className="flex size-11 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              <ArrowLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Next testimonial"
+              onClick={() => instanceRef.current?.next()}
+              className="flex size-11 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              <ArrowRight className="size-4" />
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

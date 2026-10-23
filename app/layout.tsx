@@ -1,12 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { GeistMono } from "geist/font/mono"
-import { Poppins, Bricolage_Grotesque } from "next/font/google"
+import { Bricolage_Grotesque } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { QueryProvider } from "@/components/providers/query-provider"
+import { MotionProvider } from "@/components/providers/motion-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from "react"
 import "keen-slider/keen-slider.min.css";
@@ -44,12 +45,14 @@ export default function RootLayout({
        className="font-sans"
       >
         <QueryProvider>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <Toaster />
-          </Suspense>
+          <MotionProvider>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+              <Toaster />
+            </Suspense>
+          </MotionProvider>
         </QueryProvider>
         <Analytics />
       </body>

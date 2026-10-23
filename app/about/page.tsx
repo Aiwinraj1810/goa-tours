@@ -1,10 +1,51 @@
-import { getPublishedPageBySlug } from "@/lib/cms";
-import { BlockRenderer } from "@/components/block-renderer";
-import CommonContainer from "@/components/CommonConatiner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Compass, Users, Heart } from "lucide-react";
-import { ClientCarousel } from "@/components/ui/client-carousel";
 import Image from "next/image";
+import { Compass, Users, Heart } from "lucide-react";
+
+import { getPublishedPageBySlug } from "@/lib/cms";
+import { hasPhoto } from "@/lib/utils";
+import { BlockRenderer } from "@/components/block-renderer";
+import Reveal from "@/components/reveal";
+import { ClientCarousel } from "@/components/ui/client-carousel";
+
+// NOTE: no CMS "about" page is published yet, so this page renders the content
+// below. If one is published, its blocks take over (see AboutPage). This content
+// is unchanged from the previous version of the page.
+const founder = {
+  name: "Jaya Devan",
+  role: "Founder & Head Guide, Real Goa Holidays",
+  // No founder photograph has been supplied yet: this placeholder is treated
+  // as "no photo" and replaced by a deliberate typographic panel until a real
+  // image URL is set here (or this section moves into the CMS).
+  image: "/placeholder.svg",
+  bio: [
+    "Born and raised in Panaji, Jaya has spent over 15 years introducing travellers to the Goa that locals love — the quiet fishing villages, the centuries-old chapels tucked between cashew groves, and the shacks where the catch of the day is still cooked over wood fire.",
+    "After years of guiding for larger operators, she founded Real Goa Holidays with one simple belief: the best travel experiences are built on genuine connections, not itineraries. Every trip is planned with the same care she would put into showing a close friend around her home.",
+    "When she's not on the road, you'll find her at the Sunday market in Mapusa or sailing off Cabo de Rama — living the Goa she loves to share.",
+  ],
+};
+
+const brand = {
+  heading: "About Real Goa Holidays",
+  intro:
+    "We're local experts dedicated to authentic, premium experiences across Goa. From serene beaches and historic forts to hidden waterfalls and culinary trails, our mission is to craft moments that feel both effortless and unforgettable.",
+  benefits: [
+    {
+      icon: Compass,
+      title: "Experienced Guides",
+      text: "Our guides are local, certified, and passionate about Goa's culture, nature, and history.",
+    },
+    {
+      icon: Users,
+      title: "Custom Packages",
+      text: "Tailor-made itineraries for families, couples, groups, and solo travelers—at your pace.",
+    },
+    {
+      icon: Heart,
+      title: "Authentic Experiences",
+      text: "Support local communities while discovering the real Goa—beyond the tourist trail.",
+    },
+  ],
+};
 
 const testimonials = [
   {
@@ -37,6 +78,16 @@ const testimonials = [
   },
 ];
 
+function initialsOf(name: string) {
+  return name
+    .split(/\s+/)
+    .filter((word) => /^\p{L}/u.test(word))
+    .map((word) => word[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
 export default async function AboutPage() {
   const cmsPage = await getPublishedPageBySlug("about").catch(() => null);
   if (cmsPage && cmsPage.blocks.length > 0) {
@@ -49,126 +100,108 @@ export default async function AboutPage() {
     );
   }
 
+  const founderPhoto = hasPhoto(founder.image);
+
   return (
     <>
-      <CommonContainer>
-        {/* Owner section */}
-        <div className="mx-auto max-w-6xl px-4 py-16 border-t">
-          <div className="grid gap-12 md:grid-cols-2 items-center">
-            <div className="relative aspect-[4/5] w-full max-w-sm mx-auto md:mx-0 rounded-2xl overflow-hidden">
-              <Image
-                src="/placeholder.svg"
-                alt="Jaya Devan — Founder of Real Goa Holidays"
-                fill
-                className="object-cover"
-              />
+      <h1 className="sr-only">{brand.heading}</h1>
+
+      {/* Founder */}
+      <section className="pb-[clamp(4.5rem,9vw,9rem)] pt-32 md:pt-44">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-0">
+          {/* Portrait bleeds to the left edge */}
+          <Reveal className="lg:col-span-5">
+            <div className="relative aspect-[4/5] max-h-[72svh] w-full overflow-hidden bg-navy lg:max-h-none lg:rounded-r-[2.5rem]">
+              {founderPhoto ? (
+                <Image
+                  src={founder.image}
+                  alt={`${founder.name} — ${founder.role}`}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 42vw, 100vw"
+                  className="object-cover"
+                />
+              ) : (
+                // No photograph supplied yet: initials from the founder's name, set large.
+                <div aria-hidden className="absolute inset-0 flex items-end p-[var(--gutter)]">
+                  <span className="select-none text-[clamp(7rem,20vw,15rem)] font-semibold leading-[0.8] tracking-tighter text-navy-foreground/15">
+                    {initialsOf(founder.name)}
+                  </span>
+                </div>
+              )}
             </div>
+          </Reveal>
 
-            <div>
-              <p className="text-sm uppercase tracking-widest text-muted-foreground mb-3">
-                Meet the founder
-              </p>
-              <h2 className="text-3xl font-bold mb-1">Jaya Devan</h2>
-              <p className="text-primary font-medium mb-6">
-                Founder & Head Guide, Real Goa Holidays
-              </p>
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  Born and raised in Panaji, Jaya has spent over 15 years
-                  introducing travellers to the Goa that locals love — the quiet
-                  fishing villages, the centuries-old chapels tucked between
-                  cashew groves, and the shacks where the catch of the day is
-                  still cooked over wood fire.
+          <Reveal
+            delay={0.1}
+            className="gutter lg:col-span-6 lg:col-start-7 lg:pl-4 xl:pl-10"
+          >
+            <p className="eyebrow text-primary">Meet the founder</p>
+            <h2 className="text-headline mt-4 text-balance text-foreground">{founder.name}</h2>
+            <p className="mt-4 text-lg font-medium text-primary">{founder.role}</p>
+            <div aria-hidden className="my-8 h-px w-16 bg-foreground/25" />
+            <div className="measure space-y-5 text-lg leading-[1.7] text-muted-foreground">
+              {founder.bio.map((paragraph, i) => (
+                <p key={i} className={i === 0 ? "text-xl leading-[1.6] text-foreground/85" : undefined}>
+                  {paragraph}
                 </p>
-                <p>
-                  After years of guiding for larger operators, she founded Real
-                  Goa Holidays with one simple belief: the best travel
-                  experiences are built on genuine connections, not itineraries.
-                  Every trip is planned with the same care she would put into
-                  showing a close friend around her home.
-                </p>
-                <p>
-                  When she's not on the road, you'll find her at the Sunday
-                  market in Mapusa or sailing off Cabo de Rama — living the Goa
-                  she loves to share.
-                </p>
-              </div>
+              ))}
             </div>
-          </div>
+          </Reveal>
         </div>
-        <div className="mx-auto max-w-6xl px-4 py-12">
-          <h1 className="text-3xl font-semibold text-balance mb-4">
-            About Real Goa Holidays
-          </h1>
-          <p className="text-muted-foreground max-w-3xl">
-            We're local experts dedicated to authentic, premium experiences
-            across Goa. From serene beaches and historic forts to hidden
-            waterfalls and culinary trails, our mission is to craft moments that
-            feel both effortless and unforgettable.
-          </p>
+      </section>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            <Card className="bg-card shadow-sm">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Compass className="h-5 w-5 text-accent" />
-                  <CardTitle>Experienced Guides</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="text-muted-foreground">
-                Our guides are local, certified, and passionate about Goa's
-                culture, nature, and history.
-              </CardContent>
-            </Card>
+      {/* The brand, and what it stands for */}
+      <section className="gutter section-y bg-muted/50">
+        <div className="wide grid gap-14 lg:grid-cols-12 lg:gap-10">
+          <Reveal className="lg:col-span-5">
+            <h2 className="text-headline text-balance text-foreground">{brand.heading}</h2>
+            <p className="measure mt-6 text-lg leading-relaxed text-muted-foreground">
+              {brand.intro}
+            </p>
+          </Reveal>
 
-            <Card className="bg-card shadow-sm">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-accent" />
-                  <CardTitle>Custom Packages</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="text-muted-foreground">
-                Tailor-made itineraries for families, couples, groups, and solo
-                travelers—at your pace.
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card shadow-sm">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Heart className="h-5 w-5 text-accent" />
-                  <CardTitle>Authentic Experiences</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="text-muted-foreground">
-                Support local communities while discovering the real Goa—beyond
-                the tourist trail.
-              </CardContent>
-            </Card>
-          </div>
+          <ul className="lg:col-span-6 lg:col-start-7">
+            {brand.benefits.map(({ icon: Icon, title, text }, i) => (
+              <li key={title} className="border-t border-border last:border-b">
+                <Reveal delay={i * 0.06}>
+                  <div className="group flex gap-6 py-8 md:gap-8 md:py-10">
+                    <span className="w-7 shrink-0 pt-1.5 text-sm tabular-nums text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div className="transition-transform duration-500 ease-out group-hover:translate-x-1">
+                      <div className="flex items-center gap-3">
+                        <Icon className="size-5 shrink-0 text-accent" strokeWidth={1.6} aria-hidden />
+                        <h3 className="text-title text-foreground">{title}</h3>
+                      </div>
+                      <p className="measure mt-3 text-muted-foreground md:text-lg">{text}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
         </div>
-      </CommonContainer>
+      </section>
 
-      {/* Testimonials carousel */}
-      <section
-        aria-labelledby="about-clients-heading"
-        className="py-16 bg-gray-50"
-      >
-        <div className="container mx-auto px-0 lg:px-4">
-          <div className="text-center mb-12">
+      {/* Testimonials */}
+      <section aria-labelledby="about-clients-heading" className="gutter section-y bg-secondary/50">
+        <div className="wide">
+          <Reveal className="max-w-3xl">
             <h2
               id="about-clients-heading"
-              className="text-3xl font-bold text-gray-800 mb-4 text-pretty"
+              className="text-headline text-balance text-foreground"
             >
               Memories That Stay with You
             </h2>
-            <p className="text-gray-600 px-5 lg:px-0">
-              Memories made, moments cherished — here&apos;s what travellers say
-              about Real Goa Holidays.
+            <p className="measure mt-5 text-lg text-muted-foreground">
+              Memories made, moments cherished — here&apos;s what travellers say about Real Goa
+              Holidays.
             </p>
+          </Reveal>
+          <div className="mt-12 md:mt-16">
+            <ClientCarousel testimonials={testimonials} />
           </div>
-          <ClientCarousel testimonials={testimonials} />
         </div>
       </section>
     </>
