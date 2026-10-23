@@ -1,7 +1,23 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getDestination, isValidDestination } from "@/lib/destinations";
 import GalleryGrid from "@/components/gallery-grid";
 import { hasPhoto } from "@/lib/utils";
+import { pageTitle } from "@/lib/site";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ destination: string }>;
+}): Promise<Metadata> {
+  const { destination } = await params;
+  const dest = getDestination(destination);
+  if (!dest) return {};
+  return {
+    title: pageTitle(`${dest.label} Gallery`),
+    description: `Photographs of ${dest.label} from Real Goa Holidays.`,
+  };
+}
 
 export default async function DestinationGalleryPage({
   params,

@@ -1,10 +1,26 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { pageTitle } from "@/lib/site";
 import { getDestination, isValidDestination } from "@/lib/destinations";
 import CommonContainer from "@/components/CommonConatiner";
 import EnquiryForm from "@/components/enquiry-form";
 import ScrollToFormButton from "@/components/scroll-to-form-button";
 import { Phone, Mail, MapPin, ShieldCheck } from "lucide-react";
 import type { DestinationSlug } from "@/lib/destinations/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ destination: string }>;
+}): Promise<Metadata> {
+  const { destination } = await params;
+  const dest = getDestination(destination);
+  if (!dest) return {};
+  return {
+    title: pageTitle(`Contact Us — ${dest.label}`),
+    description: `Plan your ${dest.label} trip with Real Goa Holidays. Send an enquiry or call us.`,
+  };
+}
 
 export default async function DestinationContactPage({
   params,

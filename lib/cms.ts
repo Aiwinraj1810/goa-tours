@@ -71,3 +71,19 @@ export async function getPublishedPackageBySlug(
     _id: doc._id.toString(),
   } as CmsPackage;
 }
+
+// Slugs of published pages, for the sitemap. Global pages have no destination.
+export async function getPublishedPageSlugs(): Promise<
+  { slug: string; destination?: string; updatedAt?: Date }[]
+> {
+  const db = await getDb();
+  const docs = await db
+    .collection(COLLECTIONS.pages)
+    .find({ status: "published" }, { projection: { slug: 1, destination: 1, updatedAt: 1 } })
+    .toArray();
+  return docs.map((doc) => ({
+    slug: doc.slug as string,
+    destination: doc.destination as string | undefined,
+    updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : undefined,
+  }));
+}

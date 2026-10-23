@@ -145,7 +145,7 @@ export default function OffersGrid({ heading, subheading, offers }: OffersGridPr
                       </div>
                       <div className="min-w-0">
                         {offer.badge ? (
-                          <p className="eyebrow mb-2 text-accent">{offer.badge}</p>
+                          <p className="eyebrow mb-2 text-accent-strong">{offer.badge}</p>
                         ) : null}
                         <h3 className="text-title text-foreground">{offer.title}</h3>
                         {offer.subtitle ? (

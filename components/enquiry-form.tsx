@@ -31,6 +31,8 @@ type Enquiry = {
   message?: string;
   packageName?: string;
   destination: "goa" | "kerala";
+  /** Honeypot: people never see or fill this, bots usually do. */
+  company?: string;
 };
 
 export default function EnquiryForm({
@@ -71,6 +73,7 @@ export default function EnquiryForm({
       message: "",
       packageName: packageName ?? "",
       destination,
+      company: "",
     },
   });
 
@@ -110,7 +113,7 @@ export default function EnquiryForm({
   // Styling only: the editorial variant uses larger, warmer, indigo-focused fields.
   const labelCls = editorial ? "mb-2 text-sm font-medium text-foreground" : undefined;
   const inputCls = editorial
-    ? "h-12 rounded-xl border-border bg-background px-4 text-base shadow-none placeholder:text-muted-foreground/60 focus-visible:border-primary focus-visible:ring-primary/20"
+    ? "h-12 rounded-xl border-border bg-background px-4 text-base shadow-none placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
     : undefined;
   const errorCls = editorial
     ? "mt-1.5 text-sm text-destructive"
@@ -363,7 +366,7 @@ export default function EnquiryForm({
               aria-describedby={errors.message ? "message-error" : undefined}
               className={
                 editorial
-                  ? "min-h-28 rounded-xl border-border bg-background px-4 py-3 text-base shadow-none placeholder:text-muted-foreground/60 focus-visible:border-primary focus-visible:ring-primary/20"
+                  ? "min-h-28 rounded-xl border-border bg-background px-4 py-3 text-base shadow-none placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/20"
                   : undefined
               }
               {...field}
@@ -375,6 +378,25 @@ export default function EnquiryForm({
             {errors.message.message}
           </p>
         )}
+      </div>
+
+      {/* Honeypot (spam trap): hidden from people and assistive tech, tempting to bots */}
+      <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="company">Company (leave this empty)</label>
+        <Controller
+          name="company"
+          control={control}
+          render={({ field }) => (
+            <input
+              id="company"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              {...field}
+              value={field.value ?? ""}
+            />
+          )}
+        />
       </div>
 
       <Button

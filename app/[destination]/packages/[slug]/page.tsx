@@ -1,4 +1,6 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowLeft, Download } from "lucide-react";
@@ -6,6 +8,7 @@ import { ArrowDown, ArrowLeft, Download } from "lucide-react";
 import { getDestination, getPackageBySlug, isValidDestination } from "@/lib/destinations";
 import { getPublishedPackageBySlug } from "@/lib/cms";
 import { hasPhoto } from "@/lib/utils";
+import { pageTitle } from "@/lib/site";
 import CtaBanner from "@/components/cta-banner";
 import EnquiryForm from "@/components/enquiry-form";
 import ItineraryTimeline from "@/components/itinerary-timeline";
@@ -17,17 +20,23 @@ import type { ItineraryDay } from "@/lib/packages";
 // then the code-based content). Optional fields stay empty and are not rendered.
 type DetailPackage = {
   title: string;
+  summary: string;
   image: string;
   details: string[];
   longDescription: string;
   itinerary: ItineraryDay[];
 };
 
-async function loadPackage(destination: string, slug: string): Promise<DetailPackage | null> {
+// cache() so the page and its metadata share one lookup per request
+const loadPackage = cache(async function loadPackage(
+  destination: string,
+  slug: string,
+): Promise<DetailPackage | null> {
   const cmsPkg = await getPublishedPackageBySlug(destination, slug).catch(() => null);
   if (cmsPkg) {
     return {
       title: cmsPkg.title,
+      summary: cmsPkg.summary ?? "",
       image: cmsPkg.heroImage ?? "",
       details: (cmsPkg.details ?? []).filter(Boolean),
       longDescription: cmsPkg.longDescription ?? "",
@@ -43,10 +52,33 @@ async function loadPackage(destination: string, slug: string): Promise<DetailPac
   if (!pkg) return null;
   return {
     title: pkg.title,
+    summary: pkg.desc,
     image: pkg.img,
     details: pkg.details ? [pkg.details] : [],
     longDescription: pkg.longDesc,
     itinerary: pkg.itinerary,
+  };
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ destination: string; slug: string }>;
+}): Promise<Metadata> {
+  const { destination, slug } = await params;
+  if (!isValidDestination(destination)) return {};
+  const pkg = await loadPackage(destination, slug);
+  if (!pkg) return {};
+  const description = (pkg.summary || pkg.longDescription).slice(0, 160) || undefined;
+  return {
+    title: pageTitle(pkg.title),
+    description,
+    openGraph: {
+      title: pkg.title,
+      description,
+      images: hasPhoto(pkg.image) ? [pkg.image] : ["/images/hero.jpg"],
+      type: "website",
+    },
   };
 }
 

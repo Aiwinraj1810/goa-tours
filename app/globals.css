@@ -23,6 +23,8 @@
 
   --accent: #1487a8; /* teal/blue */
   --accent-foreground: #ffffff;
+  /* teal for small TEXT: the brand --accent is 3.9:1 on ivory (fine for icons, short of 4.5:1 for text) */
+  --accent-strong: #0f6e8c;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
@@ -81,6 +83,7 @@
 
   --accent: #2dd4d0; /* bright teal */
   --accent-foreground: #071b1a;
+  --accent-strong: #2dd4d0;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
@@ -127,6 +130,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-strong: var(--accent-strong);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);

@@ -99,7 +99,7 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
                     onClick={() => selectDistrict(i)}
                     className={cn(
                       "relative shrink-0 whitespace-nowrap pb-2 text-[clamp(1.4rem,2.6vw,2.25rem)] font-semibold leading-none tracking-tight transition-colors",
-                      selected ? "text-foreground" : "text-foreground/30 hover:text-foreground/60"
+                      selected ? "text-foreground" : "text-foreground/60 hover:text-foreground"
                     )}
                   >
                     {d.name}
@@ -225,7 +225,7 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
                       <span
                         className={cn(
                           "w-7 shrink-0 text-sm tabular-nums transition-colors",
-                          selected ? "text-primary" : "text-muted-foreground/60"
+                          selected ? "text-primary" : "text-muted-foreground"
                         )}
                       >
                         {String(i + 1).padStart(2, "0")}

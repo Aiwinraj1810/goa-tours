@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -10,7 +10,16 @@ import { Button } from "@/components/ui/button";
 import { destinations } from "@/lib/destinations";
 import type { DestinationSlug } from "@/lib/destinations/types";
 
+// useSearchParams needs a Suspense boundary; it lives here, not around the whole site.
 export default function ThankYouPage() {
+  return (
+    <Suspense fallback={null}>
+      <ThankYouContent />
+    </Suspense>
+  );
+}
+
+function ThankYouContent() {
   const [show, setShow] = useState(false);
   const searchParams = useSearchParams();
 

@@ -15,6 +15,7 @@ import PlacesExplorer from "@/components/places-explorer";
 import TourPackagesGrid from "@/components/tour-packages-grid";
 import TransportSection from "@/components/transport-section";
 import TestimonialsQuote from "@/components/testimonials-quote";
+import RichText from "@/components/rich-text";
 
 type Props = {
   block: Block;
@@ -95,11 +96,7 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
 
     case "richText":
       if (!block.body) return null;
-      return (
-        <section className="mx-auto max-w-3xl px-4 py-12">
-          <div className="prose prose-lg">{block.body}</div>
-        </section>
-      );
+      return <RichText body={block.body} />;
 
     case "tourPackages":
       if (block.packages.length === 0) return null;

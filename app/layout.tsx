@@ -9,10 +9,16 @@ import Footer from "@/components/footer"
 import { QueryProvider } from "@/components/providers/query-provider"
 import { MotionProvider } from "@/components/providers/motion-provider"
 import { Toaster } from "@/components/ui/toaster"
-import { Suspense } from "react"
 import "keen-slider/keen-slider.min.css";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+
+// Pages and the footer read the CMS at request time. Without this, Next.js would
+// bake that content in at build time and CMS edits would not appear until the
+// next deploy (there is no revalidation hook between the CMS and this site).
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Real Goa Holidays | Sun, Sand & Serenity",
   description:
     "Premium Goa travel and tour services. Discover beaches, forts, waterfalls, local cuisine, and sunset cruises.",
@@ -21,10 +27,11 @@ export const metadata: Metadata = {
     title: "Real Goa Holidays | Sun, Sand & Serenity",
     description: "Discover the Soul of Goa — Sun, Sand & Serenity",
     images: ["/images/hero.jpg"],
-    url: "https://example.com",
+    siteName: SITE_NAME,
     type: "website",
   },
-  generator: "v0.app",
+  // Title, description and image fall back to each page's own Open Graph values.
+  twitter: { card: "summary_large_image" },
 }
 
 const bricolage = Bricolage_Grotesque({
@@ -46,12 +53,10 @@ export default function RootLayout({
       >
         <QueryProvider>
           <MotionProvider>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Header />
-              <main>{children}</main>
-              <Footer />
-              <Toaster />
-            </Suspense>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <Toaster />
           </MotionProvider>
         </QueryProvider>
         <Analytics />

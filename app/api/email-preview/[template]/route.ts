@@ -14,6 +14,8 @@ const SAMPLE_DATA = {
   message: "Looking for a relaxing beach holiday with some adventure activities.",
   packageName: "Premium Goa Escape",
   createdAt: new Date().toISOString(),
+  enquiryId: "preview-001",
+  submittedAt: new Date().toISOString(),
 };
 
 export async function GET(

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Phone } from "lucide-react";
@@ -8,6 +9,7 @@ import { getPublishedPackagesByDestination, getSiteSettings } from "@/lib/cms";
 import { CONTACT } from "@/lib/constants";
 import Reveal from "@/components/reveal";
 import { hasPhoto } from "@/lib/utils";
+import { pageTitle } from "@/lib/site";
 
 // One shape for the listing, whichever source the packages come from.
 // Optional fields stay empty and are simply not rendered.
@@ -64,6 +66,20 @@ function ViewDetails({ href, large = false }: { href: string; large?: boolean })
       <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-1" />
     </Link>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ destination: string }>;
+}): Promise<Metadata> {
+  const { destination } = await params;
+  const dest = getDestination(destination);
+  if (!dest) return {};
+  return {
+    title: pageTitle(`Tour Packages in ${dest.label}`),
+    description: `Browse ${dest.label} tour packages from Real Goa Holidays, from quick escapes to full adventures.`,
+  };
 }
 
 export default async function DestinationPackagesPage({

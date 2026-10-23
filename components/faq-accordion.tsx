@@ -22,7 +22,7 @@ export default function FaqAccordion({ heading, subheading, items }: FaqAccordio
       <div className="gutter wide grid gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
-            <p className="eyebrow text-accent">Frequently Asked Questions</p>
+            <p className="eyebrow text-accent-strong">Frequently Asked Questions</p>
             <h2 className="text-headline mt-4 text-balance text-foreground">{heading}</h2>
             {subheading ? (
               <p className="measure mt-5 text-muted-foreground">{subheading}</p>

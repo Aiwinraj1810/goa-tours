@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { Compass, Users, Heart } from "lucide-react";
 
 import { getPublishedPageBySlug } from "@/lib/cms";
 import { hasPhoto } from "@/lib/utils";
+import { pageTitle } from "@/lib/site";
 import { BlockRenderer } from "@/components/block-renderer";
 import Reveal from "@/components/reveal";
 import { ClientCarousel } from "@/components/ui/client-carousel";
@@ -77,6 +79,14 @@ const testimonials = [
     text: "Goa was always on my bucket list, and Real Goa Holidays brought it to life. The cultural tour of Old Goa, the beach vibes, and the food trail were simply incredible. Their team goes beyond expectations, you truly feel like you are traveling with friends who know every hidden gem.",
   },
 ];
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsPage = await getPublishedPageBySlug("about").catch(() => null);
+  return {
+    title: cmsPage?.seoTitle || pageTitle("About Us"),
+    description: cmsPage?.seoDescription || brand.intro,
+  };
+}
 
 function initialsOf(name: string) {
   return name
