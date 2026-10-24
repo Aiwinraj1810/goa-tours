@@ -5,6 +5,7 @@ import ClimateSection from "@/components/climate-section";
 import CollectionsGrid from "@/components/collections-grid";
 import CtaBanner from "@/components/cta-banner";
 import DestinationHighlight from "@/components/destination-highlight";
+import EducationalTrips from "@/components/educational-trips";
 import EnquireBanner from "@/components/enquire-banner";
 import FaqAccordion from "@/components/faq-accordion";
 import FeaturesGrid from "@/components/features-grid";
@@ -17,13 +18,22 @@ import TransportSection from "@/components/transport-section";
 import TestimonialsQuote from "@/components/testimonials-quote";
 import RichText from "@/components/rich-text";
 
+export type EnquiryLink = { label: string; href: string };
+
 type Props = {
   block: Block;
+  /** The page's configured enquiry link (from its enquireBanner block). */
+  enquiry?: EnquiryLink;
   destination?: string;
   destinationLabel?: string;
 };
 
-export function BlockRenderer({ block, destination = "", destinationLabel = "" }: Props) {
+export function BlockRenderer({
+  block,
+  enquiry,
+  destination = "",
+  destinationLabel = "",
+}: Props) {
   switch (block.type) {
     case "hero":
       return (
@@ -67,14 +77,25 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
         <TransportSection
           transport={block.entries}
           destinationLabel={destinationLabel}
+          eyebrow={block.eyebrow}
+          heading={block.heading}
+          subheading={block.subheading}
+          ctaText={block.ctaText}
+          enquiry={enquiry}
         />
       );
 
     case "climate":
+      if (block.entries.length === 0) return null;
       return (
         <ClimateSection
           climate={block.entries}
           destinationLabel={destinationLabel}
+          eyebrow={block.eyebrow}
+          heading={block.heading}
+          subheading={block.subheading}
+          ctaText={block.ctaText}
+          enquiry={enquiry}
         />
       );
 
@@ -164,6 +185,23 @@ export function BlockRenderer({ block, destination = "", destinationLabel = "" }
       if (block.offers.length === 0) return null;
       return (
         <OffersGrid heading={block.heading} subheading={block.subheading} offers={block.offers} />
+      );
+
+    case "educationalTrips":
+      if (!block.heading && !block.description) return null;
+      return (
+        <EducationalTrips
+          layout={block.layout ?? "feature"}
+          eyebrow={block.eyebrow ?? ""}
+          heading={block.heading ?? ""}
+          description={block.description ?? ""}
+          image={block.image ?? ""}
+          images={block.images}
+          imageAlt={block.imageAlt ?? ""}
+          ctaLabel={block.ctaLabel ?? ""}
+          ctaHref={block.ctaHref ?? ""}
+          highlights={block.highlights ?? []}
+        />
       );
 
     case "faq":

@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { District } from "@/lib/destinations/types";
+import type { District, Place } from "@/lib/destinations/types";
 
 type Props = {
   districts: District[];
@@ -14,6 +14,20 @@ type Props = {
 };
 
 const ease = [0.22, 1, 0.36, 1] as const;
+
+// Groups a district's places by their optional category, keeping the order in
+// which categories first appear in the CMS. Without categories the list is
+// returned untouched and no group headings are shown.
+function groupByCategory(places: Place[]) {
+  const hasCategories = places.some((p) => p.category?.trim());
+  if (!hasCategories) return { ordered: places, hasCategories };
+  const groups = new Map<string, Place[]>();
+  for (const p of places) {
+    const key = p.category?.trim() ?? "";
+    groups.set(key, [...(groups.get(key) ?? []), p]);
+  }
+  return { ordered: [...groups.values()].flat(), hasCategories };
+}
 
 export default function PlacesExplorer({ districts, destinationLabel }: Props) {
   const [activeDistrict, setActiveDistrict] = useState(0);
@@ -39,10 +53,28 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
     };
   }, [tabsApi]);
 
+  const listRef = useRef<HTMLOListElement>(null);
+  const photoRef = useRef<HTMLDivElement>(null);
   const district = districts[activeDistrict];
+  const { ordered: places, hasCategories } = useMemo(
+    () => groupByCategory(district?.places ?? []),
+    [district]
+  );
+
+  // Keep the selected spot visible when it changes via the arrows (the list
+  // scrolls inside its own box, so move that box rather than the page).
+  useEffect(() => {
+    const list = listRef.current;
+    const item = list?.querySelector<HTMLElement>("[aria-current='true']")?.closest("li");
+    if (!list || !item) return;
+    const top = item.offsetTop - list.offsetTop;
+    if (top < list.scrollTop || top + item.offsetHeight > list.scrollTop + list.clientHeight) {
+      list.scrollTo({ top: top - 8, behavior: "smooth" });
+    }
+  }, [activePlace, activeDistrict]);
+
   if (!district) return null;
 
-  const places = district.places;
   const placeIndex = Math.min(activePlace, Math.max(places.length - 1, 0));
   const place = places[placeIndex];
   const images = place?.images ?? [];
@@ -55,9 +87,15 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
     setActiveImage(0);
   }
 
-  function selectPlace(i: number) {
+  function selectPlace(i: number, reveal = false) {
     setActivePlace(i);
     setActiveImage(0);
+    const photo = photoRef.current;
+    if (reveal && photo && window.matchMedia("(max-width: 1023px)").matches) {
+      const r = photo.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > window.innerHeight)
+        photo.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 
   function step(dir: 1 | -1) {
@@ -125,7 +163,9 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
 
         {/* B — featured photograph, bleeding to the right edge on desktop */}
         <div className="lg:col-span-7 lg:col-start-6 lg:row-span-2 lg:row-start-1">
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary sm:aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[28rem] lg:rounded-l-[2.5rem]">
+          <div
+            ref={photoRef}
+            className="relative aspect-[4/5] w-full scroll-mt-20 overflow-hidden bg-secondary sm:aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[28rem] lg:rounded-l-[2.5rem]">
             <AnimatePresence initial={false}>
               <motion.div
                 key={`${activeDistrict}-${placeIndex}-${activeImage}`}
@@ -165,7 +205,9 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
                     transition={{ duration: 0.5, ease }}
                   >
                     <p className="eyebrow mb-3 text-white/75">
-                      {district.name} · {String(placeIndex + 1).padStart(2, "0")}
+                      {district.name}
+                      {place.category ? ` · ${place.category}` : ""} ·{" "}
+                      {String(placeIndex + 1).padStart(2, "0")}
                     </p>
                     <h3 className="text-title">{place.name}</h3>
                     {images.length > 1 ? (
@@ -212,13 +254,28 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
         {/* C — numbered index */}
         <div className="gutter lg:col-span-5 lg:row-start-2 lg:pr-14">
           {places.length > 0 ? (
-            <ol className="lg:h-[min(62vh,580px)] lg:overflow-y-auto lg:pr-2 [scrollbar-width:thin]">
+            <ol
+              ref={listRef}
+              className="relative max-h-[26rem] overflow-y-auto overscroll-contain pr-2 [scrollbar-width:thin] lg:h-[min(62vh,580px)] lg:max-h-none"
+            >
               {places.map((p, i) => {
                 const selected = i === placeIndex;
+                const category = p.category?.trim() ?? "";
+                const startsGroup =
+                  hasCategories && (i === 0 || (places[i - 1].category?.trim() ?? "") !== category);
                 return (
-                  <li key={p.name} className="border-t border-border last:border-b">
+                  <Fragment key={`${p.name}-${i}`}>
+                  {startsGroup && category ? (
+                    <li
+                      role="presentation"
+                      className="eyebrow bg-background pb-3 pt-6 text-primary first:pt-0"
+                    >
+                      {category}
+                    </li>
+                  ) : null}
+                  <li className="border-t border-border last:border-b">
                     <button
-                      onClick={() => selectPlace(i)}
+                      onClick={() => selectPlace(i, true)}
                       aria-current={selected}
                       className="group flex w-full items-baseline gap-5 py-5 text-left"
                     >
@@ -266,6 +323,7 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
                       />
                     </button>
                   </li>
+                  </Fragment>
                 );
               })}
             </ol>

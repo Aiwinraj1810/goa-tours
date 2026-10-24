@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-   --font-sans: var(--font-bricolage);
+  --font-sans: var(--font-bricolage);
   --background: #fbf8f2; /* warm ivory */
   --foreground: #17152e; /* near-black indigo */
   --card: #ffffff;
@@ -59,6 +59,13 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #e7e1d2;
   --sidebar-ring: #3d3480;
+
+  font-size: min(
+    /* width-driven clamp: anchor 1vw to 1.512rem (24.19px at 16px base) — 40% larger */
+    clamp(0.945rem, calc(1.05rem + ((1vw - 1.512rem) * 1.25)), 1.512rem),
+    /* height-driven clamp: anchor 1svh to 0.945rem (15.12px at 16px base) — 40% larger */
+    clamp(0.945rem, calc(1.05rem + ((1svh - 0.945rem) * 1.25)), 1.512rem)
+  );
 }
 
 .dark {
@@ -170,7 +177,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
 
 /* ── Layout primitives ─────────────────────────────────────────────────────
    Replace the old "max-w-7xl mx-auto px-5" container. Sections choose their

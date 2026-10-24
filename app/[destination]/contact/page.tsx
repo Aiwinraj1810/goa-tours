@@ -24,10 +24,19 @@ export async function generateMetadata({
 
 export default async function DestinationContactPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ destination: string }>;
+  searchParams: Promise<{ interest?: string | string[] }>;
 }) {
   const { destination } = await params;
+  // An optional "?interest=" (e.g. from the School & College Trips page) is
+  // shown and sent through the form's existing "Package" field. Capped and
+  // stripped of markup characters since it comes from the URL.
+  const { interest } = await searchParams;
+  const interestValue =
+    (typeof interest === "string" ? interest : "").replace(/[<>]/g, "").trim().slice(0, 80) ||
+    undefined;
   if (!isValidDestination(destination)) notFound();
 
   const dest = getDestination(destination)!;
@@ -105,7 +114,10 @@ export default async function DestinationContactPage({
           </div>
 
           <div id="enquiry-form">
-            <EnquiryForm destination={destination as DestinationSlug} />
+            <EnquiryForm
+              destination={destination as DestinationSlug}
+              packageName={interestValue}
+            />
           </div>
         </div>
       </div>

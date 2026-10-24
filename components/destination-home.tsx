@@ -26,12 +26,21 @@ export default async function DestinationHome({
   const cmsPage = await getPublishedPageBySlug(destination).catch(() => null);
 
   if (cmsPage && cmsPage.blocks.length > 0) {
+    // Reuse the enquiry link already configured on the page, so the travel
+    // information sections point at the same place as the Enquire button.
+    const banner = cmsPage.blocks.find((b) => b.type === "enquireBanner");
+    const enquiry =
+      banner && banner.type === "enquireBanner" && banner.ctaHref
+        ? { label: banner.ctaLabel, href: banner.ctaHref }
+        : undefined;
+
     return (
       <>
         {cmsPage.blocks.map((block) => (
           <BlockRenderer
             key={block.id}
             block={block}
+            enquiry={enquiry}
             destination={destination}
             destinationLabel={label}
           />

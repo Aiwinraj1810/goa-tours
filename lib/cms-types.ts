@@ -43,12 +43,20 @@ export type PlacesBlock = {
 export type TransportBlock = {
   id: string;
   type: "transport";
+  ctaText?: string;
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
   entries: TransportEntry[];
 };
 
 export type ClimateBlock = {
   id: string;
   type: "climate";
+  ctaText?: string;
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
   entries: ClimateEntry[];
 };
 
@@ -199,6 +207,21 @@ export type FaqBlock = {
   items: FaqItem[];
 };
 
+export type EducationalTripsBlock = {
+  id: string;
+  type: "educationalTrips";
+  layout?: "hero" | "feature" | "list" | "story" | "story-reverse" | "closing";
+  eyebrow: string;
+  heading: string;
+  description: string;
+  image: string;
+  images?: string[];
+  imageAlt: string;
+  ctaLabel: string;
+  ctaHref: string;
+  highlights: { title: string; text: string }[];
+};
+
 export type Block =
   | HeroBlock
   | ActivitiesBlock
@@ -215,7 +238,8 @@ export type Block =
   | EnquireBannerBlock
   | CollectionsBlock
   | OffersBlock
-  | FaqBlock;
+  | FaqBlock
+  | EducationalTripsBlock;
 
 export type CmsPackage = {
   _id: string;

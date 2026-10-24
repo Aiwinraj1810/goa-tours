@@ -51,6 +51,8 @@ export type Place = {
   name: string;
   description?: string;
   images: string[];
+  /** Optional grouping label within a district, e.g. "Beaches". */
+  category?: string;
 };
 
 export type District = {
@@ -63,12 +65,19 @@ export type TransportEntry = {
   location: string;
   mapEmbedUrl: string;
   description: string;
+  kind?: "airport" | "railway" | "port" | "bus" | "other";
+  code?: string;
+  serves?: string[];
 };
 
 export type ClimateEntry = {
   period: string;
   summary: string;
   description: string;
+  /** Months 1–12, .5 = mid-month. start > end wraps over the new year. */
+  startMonth?: number;
+  endMonth?: number;
+  season?: "best" | "hot" | "monsoon" | "other";
 };
 
 export type DestinationContent = {
