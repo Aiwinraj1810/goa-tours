@@ -9,6 +9,7 @@ import EducationalTrips from "@/components/educational-trips";
 import EnquireBanner from "@/components/enquire-banner";
 import FaqAccordion from "@/components/faq-accordion";
 import FeaturesGrid from "@/components/features-grid";
+import FounderProfile from "@/components/founder-profile";
 import GalleryGrid from "@/components/gallery-grid";
 import Hero from "@/components/hero";
 import OffersGrid from "@/components/offers-grid";
@@ -44,6 +45,7 @@ export function BlockRenderer({
           subheading={block.subheading}
           locationLabel={block.locationLabel}
           bestTime={block.bestTime}
+          videoUrl={block.videoUrl}
           images={block.images.length > 0 ? block.images : undefined}
           primaryCtaLabel={block.primaryCtaLabel}
           primaryCtaHref={block.primaryCtaHref}
@@ -130,10 +132,11 @@ export function BlockRenderer({
       );
 
     case "destinationHighlight":
-      if (!block.bannerImage) return null;
+      if (!block.bannerImage && !block.bannerVideoUrl) return null;
       return (
         <DestinationHighlight
           bannerImage={block.bannerImage}
+          bannerVideoUrl={block.bannerVideoUrl}
           bannerBadge={block.bannerBadge}
           bannerEyebrow={block.bannerEyebrow}
           bannerTitle={block.bannerTitle}
@@ -201,6 +204,19 @@ export function BlockRenderer({
           ctaLabel={block.ctaLabel ?? ""}
           ctaHref={block.ctaHref ?? ""}
           highlights={block.highlights ?? []}
+        />
+      );
+
+    case "founder":
+      if (!block.name && (block.bio ?? []).length === 0) return null;
+      return (
+        <FounderProfile
+          eyebrow={block.eyebrow ?? ""}
+          name={block.name ?? ""}
+          role={block.role ?? ""}
+          image={block.image ?? ""}
+          imageAlt={block.imageAlt ?? ""}
+          bio={block.bio ?? []}
         />
       );
 

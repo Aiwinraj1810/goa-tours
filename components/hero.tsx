@@ -24,6 +24,7 @@ type HeroProps = {
   locationLabel?: string;
   bestTime?: string;
   images?: string[] | null;
+  videoUrl?: string;
   primaryCtaLabel?: string;
   primaryCtaHref?: string;
   secondaryCtaLabel?: string;
@@ -41,6 +42,7 @@ export default function Hero({
   locationLabel,
   bestTime,
   images,
+  videoUrl,
   primaryCtaLabel,
   primaryCtaHref,
   secondaryCtaLabel,
@@ -49,8 +51,11 @@ export default function Hero({
   ribbonCtaLabel,
   ribbonCtaHref,
 }: HeroProps) {
+  const video = videoUrl?.trim() || "";
+  const hasVideo = video.length > 0;
   const heroImages = images && images.length > 0 ? images : defaultImages;
-  const count = heroImages.length;
+  // A video takes priority: the slideshow (and its controls) is disabled.
+  const count = hasVideo ? 1 : heroImages.length;
   const [index, setIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
 
@@ -74,25 +79,39 @@ export default function Hero({
     <section aria-label={`${destination} hero`}>
       <div className="relative isolate h-[100svh] min-h-[560px] w-full overflow-hidden bg-navy">
         {/* Background photography — crossfade between slides */}
-        <AnimatePresence initial={false}>
-          <motion.div
-            key={index}
-            className="absolute inset-0"
-            initial={{ opacity: 0, scale: 1.06 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.4, ease: "easeInOut" }}
-          >
-            <Image
-              src={heroImages[index]}
-              alt={`${destination} view ${index + 1}`}
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority={index === 0}
-            />
-          </motion.div>
-        </AnimatePresence>
+        {hasVideo ? (
+          <video
+            key={video}
+            className="absolute inset-0 h-full w-full object-cover"
+            src={video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          />
+        ) : (
+          <AnimatePresence initial={false}>
+            <motion.div
+              key={index}
+              className="absolute inset-0"
+              initial={{ opacity: 0, scale: 1.06 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.4, ease: "easeInOut" }}
+            >
+              <Image
+                src={heroImages[index]}
+                alt={`${destination} view ${index + 1}`}
+                fill
+                sizes="100vw"
+                className="object-cover"
+                priority={index === 0}
+              />
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* Even tone for legibility, plus a bottom scrim where the type sits */}
         <div className="absolute inset-0 bg-black/25" />

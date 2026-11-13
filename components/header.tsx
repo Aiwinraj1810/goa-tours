@@ -82,17 +82,16 @@ export default function Header() {
 
   const isPackageDetail = /^\/(goa|kerala)\/packages\/.+/.test(pathname);
 
-  const navLinks = destination
-    ? [
-        { name: "Home", href: `/${destination}` },
-        { name: "Packages", href: `/${destination}/packages` },
-        { name: "Gallery", href: `/${destination}/gallery` },
-        { name: "About", href: "/about" },
-      ]
-    : [
-        { name: "Home", href: "/" },
-        { name: "About", href: "/about" },
-      ];
+  // "/" is the Goa home page and other global pages (about, CMS pages) sit
+  // outside a destination, so those fall back to Goa for Packages, Gallery and
+  // Enquire instead of dropping them from the header.
+  const navDestination = destination ?? "goa";
+  const navLinks = [
+    { name: "Home", href: destination ? `/${destination}` : "/" },
+    { name: "Packages", href: `/${navDestination}/packages` },
+    { name: "Gallery", href: `/${navDestination}/gallery` },
+    { name: "About", href: "/about" },
+  ];
 
   useEffect(() => {
     const bannerThreshold = window.innerHeight * 0.6;
@@ -237,7 +236,7 @@ export default function Header() {
               );
             })}
 
-          <Link href={destination ? `/${destination}/contact` : "/about"}>
+          <Link href={`/${navDestination}/contact`}>
             <Button
               className={cn(
                 "cursor-pointer rounded-full",

@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 type DestinationTile = {
   image: string;
+  videoUrl?: string;
   name: string;
   subtitle: string;
   href: string;
@@ -18,6 +19,7 @@ type DestinationTile = {
 
 type DestinationHighlightProps = {
   bannerImage: string;
+  bannerVideoUrl?: string;
   bannerBadge: string;
   bannerEyebrow: string;
   bannerTitle: string;
@@ -32,6 +34,7 @@ type DestinationHighlightProps = {
 
 type Slide = {
   image: string;
+  videoUrl: string;
   badge: string;
   eyebrow: string;
   title: string;
@@ -49,6 +52,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 // is the Explore section that follows.)
 export default function DestinationHighlight({
   bannerImage,
+  bannerVideoUrl,
   bannerBadge,
   bannerEyebrow,
   bannerTitle,
@@ -68,6 +72,7 @@ export default function DestinationHighlight({
   const slides: Slide[] = [
     {
       image: bannerImage,
+      videoUrl: bannerVideoUrl?.trim() || "",
       badge: bannerBadge,
       eyebrow: bannerEyebrow,
       title: bannerTitle,
@@ -79,6 +84,7 @@ export default function DestinationHighlight({
     },
     ...tiles.map((tile) => ({
       image: tile.image,
+      videoUrl: tile.videoUrl?.trim() || "",
       badge: "",
       eyebrow: tile.subtitle,
       title: tile.name,
@@ -123,17 +129,30 @@ export default function DestinationHighlight({
               aria-roledescription="slide"
               aria-label={`${i + 1} of ${slides.length}`}
             >
-              <Image
-                src={slide.image}
-                alt={slide.title}
-                fill
-                sizes="100vw"
-                priority={i === 0}
-                className={cn(
-                  "object-cover transition-transform duration-[9000ms] ease-out",
-                  i === current ? "scale-100" : "scale-[1.08]"
-                )}
-              />
+              {slide.videoUrl ? (
+                <video
+                  src={slide.videoUrl}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload={i === 0 ? "auto" : "metadata"}
+                  aria-hidden="true"
+                />
+              ) : (
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  fill
+                  sizes="100vw"
+                  priority={i === 0}
+                  className={cn(
+                    "object-cover transition-transform duration-[9000ms] ease-out",
+                    i === current ? "scale-100" : "scale-[1.08]"
+                  )}
+                />
+              )}
             </div>
           ))}
         </div>

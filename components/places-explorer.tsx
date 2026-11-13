@@ -53,8 +53,31 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
     };
   }, [tabsApi]);
 
+  // Small screens: the places sit in a swipeable strip directly under the photo
+  // instead of a long list further down the page.
+  const [stripRef, stripApi] = useEmblaCarousel({
+    dragFree: true,
+    containScroll: "trimSnaps",
+    align: "start",
+  });
+  const [stripCanNext, setStripCanNext] = useState(false);
+
+  useEffect(() => {
+    if (!stripApi) return;
+    const sync = () => setStripCanNext(stripApi.canScrollNext());
+    sync();
+    stripApi.on("scroll", sync).on("reInit", sync);
+    return () => {
+      stripApi.off("scroll", sync).off("reInit", sync);
+    };
+  }, [stripApi]);
+
+  // Keep the chosen place in view within the strip (also when the photo is swiped).
+  useEffect(() => {
+    stripApi?.scrollTo(activePlace);
+  }, [stripApi, activePlace, activeDistrict]);
+
   const listRef = useRef<HTMLOListElement>(null);
-  const photoRef = useRef<HTMLDivElement>(null);
   const district = districts[activeDistrict];
   const { ordered: places, hasCategories } = useMemo(
     () => groupByCategory(district?.places ?? []),
@@ -87,15 +110,9 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
     setActiveImage(0);
   }
 
-  function selectPlace(i: number, reveal = false) {
+  function selectPlace(i: number) {
     setActivePlace(i);
     setActiveImage(0);
-    const photo = photoRef.current;
-    if (reveal && photo && window.matchMedia("(max-width: 1023px)").matches) {
-      const r = photo.getBoundingClientRect();
-      if (r.top < 0 || r.bottom > window.innerHeight)
-        photo.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
   }
 
   function step(dir: 1 | -1) {
@@ -104,7 +121,7 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
 
   return (
     <section className="section-y overflow-hidden bg-background">
-      <div className="grid gap-y-10 lg:grid-cols-12 lg:gap-y-12">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-y-10 lg:grid-cols-12 lg:gap-y-12">
         {/* A — heading and region choice, set as part of the content */}
         <div className="gutter lg:col-span-5 lg:row-start-1 lg:pr-14">
           <p className="eyebrow text-primary">Must-visit spots</p>
@@ -163,9 +180,17 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
 
         {/* B — featured photograph, bleeding to the right edge on desktop */}
         <div className="lg:col-span-7 lg:col-start-6 lg:row-span-2 lg:row-start-1">
-          <div
-            ref={photoRef}
-            className="relative aspect-[4/5] w-full scroll-mt-20 overflow-hidden bg-secondary sm:aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[28rem] lg:rounded-l-[2.5rem]">
+          <motion.div
+            // A horizontal swipe (or mouse drag) moves to the next/previous place;
+            // vertical scrolling still passes through to the page.
+            onPanEnd={(_, info) => {
+              if (places.length < 2) return;
+              if (Math.abs(info.offset.x) > 50 && Math.abs(info.offset.x) > Math.abs(info.offset.y) * 1.5) {
+                step(info.offset.x < 0 ? 1 : -1);
+              }
+            }}
+            style={{ touchAction: "pan-y" }}
+            className="relative aspect-[4/5] w-full overflow-hidden bg-secondary sm:aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[28rem] lg:cursor-grab lg:rounded-l-[2.5rem]">
             <AnimatePresence initial={false}>
               <motion.div
                 key={`${activeDistrict}-${placeIndex}-${activeImage}`}
@@ -248,15 +273,84 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
                 ) : null}
               </div>
             ) : null}
-          </div>
+          </motion.div>
         </div>
 
-        {/* C — numbered index */}
-        <div className="gutter lg:col-span-5 lg:row-start-2 lg:pr-14">
+        {/* B2 — small screens: place strip and description, attached to the photo */}
+        <div className="-mt-4 min-w-0 lg:hidden">
+          {places.length > 0 ? (
+            <>
+              <div
+                ref={stripRef}
+                className="cursor-grab select-none overflow-hidden px-[var(--gutter)] active:cursor-grabbing [touch-action:pan-y_pinch-zoom]"
+                style={
+                  stripCanNext
+                    ? {
+                        maskImage: "linear-gradient(to right, black calc(100% - 3rem), transparent)",
+                        WebkitMaskImage:
+                          "linear-gradient(to right, black calc(100% - 3rem), transparent)",
+                      }
+                    : undefined
+                }
+              >
+                <div role="tablist" aria-label="Choose a spot" className="flex gap-x-6">
+                  {places.map((p, i) => {
+                    const selected = i === placeIndex;
+                    return (
+                      <button
+                        key={`${p.name}-${i}`}
+                        role="tab"
+                        aria-selected={selected}
+                        onClick={() => selectPlace(i)}
+                        className={cn(
+                          "relative shrink-0 whitespace-nowrap py-2 text-lg tracking-tight transition-colors",
+                          selected ? "font-semibold text-foreground" : "text-foreground/60"
+                        )}
+                      >
+                        {p.name}
+                        <span
+                          className={cn(
+                            "absolute inset-x-0 bottom-0 h-0.5 bg-primary transition-opacity",
+                            selected ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="gutter mt-4 min-h-[4.5rem]" aria-live="polite">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={`${activeDistrict}-${placeIndex}`}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, ease }}
+                  >
+                    <p className="eyebrow text-primary">
+                      {place?.category ? `${place.category} · ` : ""}
+                      {String(placeIndex + 1).padStart(2, "0")} / {String(places.length).padStart(2, "0")}
+                    </p>
+                    {place?.description ? (
+                      <p className="mt-2 text-muted-foreground">{place.description}</p>
+                    ) : null}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </>
+          ) : (
+            <p className="gutter text-muted-foreground">No spots added for {district.name} yet.</p>
+          )}
+        </div>
+
+        {/* C — numbered index (large screens) */}
+        <div className="gutter hidden lg:col-span-5 lg:row-start-2 lg:block lg:pr-14">
           {places.length > 0 ? (
             <ol
               ref={listRef}
-              className="relative max-h-[26rem] overflow-y-auto overscroll-contain pr-2 [scrollbar-width:thin] lg:h-[min(62vh,580px)] lg:max-h-none"
+              className="relative h-[min(62vh,580px)] overflow-y-auto overscroll-contain pr-2 [scrollbar-width:thin]"
             >
               {places.map((p, i) => {
                 const selected = i === placeIndex;
@@ -275,7 +369,7 @@ export default function PlacesExplorer({ districts, destinationLabel }: Props) {
                   ) : null}
                   <li className="border-t border-border last:border-b">
                     <button
-                      onClick={() => selectPlace(i, true)}
+                      onClick={() => selectPlace(i)}
                       aria-current={selected}
                       className="group flex w-full items-baseline gap-5 py-5 text-left"
                     >

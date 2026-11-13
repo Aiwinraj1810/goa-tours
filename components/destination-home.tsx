@@ -4,6 +4,8 @@ import { getPublishedPageBySlug } from "@/lib/cms";
 import { BlockRenderer } from "@/components/block-renderer";
 import Hero from "@/components/hero";
 import FloatingBookNow from "@/components/floating-book-now";
+import SectionMenu from "@/components/section-menu";
+import { sectionDomId, sectionNavLabel } from "@/lib/section-nav";
 import CtaBanner from "@/components/cta-banner";
 import ActivitiesCarousel from "@/components/activities-carousel";
 import PlacesExplorer from "@/components/places-explorer";
@@ -34,17 +36,25 @@ export default async function DestinationHome({
         ? { label: banner.ctaLabel, href: banner.ctaHref }
         : undefined;
 
+    const navItems = cmsPage.blocks.flatMap((block) => {
+      const navLabel = sectionNavLabel(block, label);
+      return navLabel ? [{ id: sectionDomId(block), label: navLabel }] : [];
+    });
+
     return (
       <>
         {cmsPage.blocks.map((block) => (
-          <BlockRenderer
-            key={block.id}
-            block={block}
-            enquiry={enquiry}
-            destination={destination}
-            destinationLabel={label}
-          />
+          // The wrapper is only a scroll target for the floating section menu.
+          <div key={block.id} id={sectionDomId(block)}>
+            <BlockRenderer
+              block={block}
+              enquiry={enquiry}
+              destination={destination}
+              destinationLabel={label}
+            />
+          </div>
         ))}
+        <SectionMenu items={navItems} />
         <FloatingBookNow destination={destination} />
       </>
     );

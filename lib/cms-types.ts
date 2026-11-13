@@ -19,6 +19,8 @@ export type HeroBlock = {
   locationLabel: string;
   bestTime?: string;
   images: string[];
+  /** When set, the video replaces the image slideshow. */
+  videoUrl?: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;
   secondaryCtaLabel: string;
@@ -108,6 +110,8 @@ export type TourPackagesBlock = {
 
 export type DestinationTile = {
   image: string;
+  /** When set, shown instead of the image. */
+  videoUrl?: string;
   name: string;
   subtitle: string;
   href: string;
@@ -117,6 +121,8 @@ export type DestinationHighlightBlock = {
   id: string;
   type: "destinationHighlight";
   bannerImage: string;
+  /** When set, shown instead of the banner image. */
+  bannerVideoUrl?: string;
   bannerBadge: string;
   bannerEyebrow: string;
   bannerTitle: string;
@@ -222,6 +228,17 @@ export type EducationalTripsBlock = {
   highlights: { title: string; text: string }[];
 };
 
+export type FounderBlock = {
+  id: string;
+  type: "founder";
+  eyebrow: string;
+  name: string;
+  role: string;
+  image: string;
+  imageAlt: string;
+  bio: string[];
+};
+
 export type Block =
   | HeroBlock
   | ActivitiesBlock
@@ -239,7 +256,8 @@ export type Block =
   | CollectionsBlock
   | OffersBlock
   | FaqBlock
-  | EducationalTripsBlock;
+  | EducationalTripsBlock
+  | FounderBlock;
 
 export type CmsPackage = {
   _id: string;

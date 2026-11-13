@@ -118,7 +118,6 @@ export default async function DestinationPackagesPage({
           days: pkg.itinerary?.length ?? 0,
         }));
 
-  const [featured, ...rest] = packages;
   const phone = settings?.phones?.[0] || CONTACT.phones[0].value;
   const hrefFor = (slug: string) => `/${destination}/packages/${slug}`;
   const count = String(packages.length).padStart(2, "0");
@@ -150,112 +149,65 @@ export default async function DestinationPackagesPage({
 
       {/* 2 — Package browsing */}
       <section className="bg-muted/50 py-[clamp(3rem,7vw,7rem)]">
-        {featured ? (
-          <>
-            {/* Featured package: photograph bleeds to the right edge */}
-            <Reveal>
-              <article className="group grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-0">
-                <Link
-                  href={hrefFor(featured.slug)}
-                  tabIndex={-1}
-                  aria-hidden
-                  className="relative block aspect-[4/3] w-full overflow-hidden bg-secondary lg:order-2 lg:col-span-7 lg:aspect-auto lg:h-[min(72vh,660px)] lg:rounded-l-[2.5rem]"
-                >
-                  <PackageImage
-                    image={featured.image}
-                    title={featured.title}
-                    label={dest.label}
-                    sizes="(min-width: 1024px) 58vw, 100vw"
-                  />
-                </Link>
+        {packages.length > 0 ? (
+          <div className="space-y-[clamp(3.5rem,7vw,7rem)]">
+            {packages.map((pkg, i) => (
+              <Reveal key={pkg.slug}>
+                {/* Every package shares this layout: photograph bleeds to the right edge */}
+                <article className="group grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-0">
+                  <Link
+                    href={hrefFor(pkg.slug)}
+                    tabIndex={-1}
+                    aria-hidden
+                    className="relative block aspect-[4/3] w-full overflow-hidden bg-secondary lg:order-2 lg:col-span-7 lg:aspect-auto lg:h-[min(72vh,660px)] lg:rounded-l-[2.5rem]"
+                  >
+                    <PackageImage
+                      image={pkg.image}
+                      title={pkg.title}
+                      label={dest.label}
+                      sizes="(min-width: 1024px) 58vw, 100vw"
+                    />
+                  </Link>
 
-                <div className="gutter lg:order-1 lg:col-span-5 lg:pr-14">
-                  <p className="text-sm tabular-nums text-muted-foreground">01</p>
-                  <h2 className="mt-3 text-balance text-[clamp(1.9rem,3.5vw,3.25rem)] font-semibold leading-[1.05] tracking-tight text-foreground">
-                    {featured.title}
-                  </h2>
-                  {featured.summary ? (
-                    <p className="measure mt-5 text-muted-foreground md:text-lg">
-                      {featured.summary}
+                  <div className="gutter lg:order-1 lg:col-span-5 lg:pr-14">
+                    <p className="text-sm tabular-nums text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")}
                     </p>
-                  ) : null}
+                    <h2 className="mt-3 text-balance text-[clamp(1.9rem,3.5vw,3.25rem)] font-semibold leading-[1.05] tracking-tight text-foreground">
+                      {pkg.title}
+                    </h2>
+                    {pkg.summary ? (
+                      <p className="measure mt-5 text-muted-foreground md:text-lg">
+                        {pkg.summary}
+                      </p>
+                    ) : null}
 
-                  {featured.details.length > 0 || featured.days > 0 ? (
-                    <ul className="mt-8 border-b border-border">
-                      {featured.days > 0 ? (
-                        <li className="border-t border-border py-3 text-sm font-medium text-foreground">
-                          {featured.days}-day itinerary
-                        </li>
-                      ) : null}
-                      {featured.details.map((detail, i) => (
-                        <li
-                          key={i}
-                          className="border-t border-border py-3 text-sm text-muted-foreground"
-                        >
-                          {detail}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-
-                  <div className="mt-9">
-                    <ViewDetails href={hrefFor(featured.slug)} large />
-                  </div>
-                </div>
-              </article>
-            </Reveal>
-
-            {/* Remaining packages: a compact, scannable index */}
-            {rest.length > 0 ? (
-              <div className="gutter wide mt-[clamp(4rem,8vw,7rem)]">
-                <p className="eyebrow text-muted-foreground">More packages</p>
-                <ul className="mt-6">
-                  {rest.map((pkg, i) => (
-                    <li key={pkg.slug} className="border-t border-border last:border-b">
-                      <Reveal>
-                        <article className="group grid gap-x-8 gap-y-5 py-8 md:grid-cols-12 md:items-center lg:gap-x-10">
-                          <Link
-                            href={hrefFor(pkg.slug)}
-                            tabIndex={-1}
-                            aria-hidden
-                            className="relative block aspect-[16/10] w-full overflow-hidden bg-secondary md:col-span-5 md:row-span-2 lg:col-span-4 lg:row-span-1"
+                    {pkg.details.length > 0 || pkg.days > 0 ? (
+                      <ul className="mt-8 border-b border-border">
+                        {pkg.days > 0 ? (
+                          <li className="border-t border-border py-3 text-sm font-medium text-foreground">
+                            {pkg.days}-day itinerary
+                          </li>
+                        ) : null}
+                        {pkg.details.map((detail, k) => (
+                          <li
+                            key={k}
+                            className="border-t border-border py-3 text-sm text-muted-foreground"
                           >
-                            <PackageImage
-                              image={pkg.image}
-                              title={pkg.title}
-                              label={dest.label}
-                              sizes="(min-width: 1024px) 32vw, 100vw"
-                            />
-                          </Link>
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
 
-                          <div className="md:col-span-7 md:self-end lg:col-span-6 lg:self-center">
-                            <p className="text-sm tabular-nums text-muted-foreground">
-                              {String(i + 2).padStart(2, "0")}
-                            </p>
-                            <h3 className="text-title mt-2 text-foreground">{pkg.title}</h3>
-                            {pkg.summary ? (
-                              <p className="measure mt-3 text-muted-foreground">{pkg.summary}</p>
-                            ) : null}
-                            {pkg.days > 0 || pkg.details.length > 0 ? (
-                              <p className="mt-3 text-sm text-foreground/70">
-                                {[pkg.days > 0 ? `${pkg.days}-day itinerary` : "", ...pkg.details]
-                                  .filter(Boolean)
-                                  .join("  ·  ")}
-                              </p>
-                            ) : null}
-                          </div>
-
-                          <div className="md:col-span-7 md:self-start lg:col-span-2 lg:self-center lg:text-right">
-                            <ViewDetails href={hrefFor(pkg.slug)} />
-                          </div>
-                        </article>
-                      </Reveal>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-          </>
+                    <div className="mt-9">
+                      <ViewDetails href={hrefFor(pkg.slug)} large />
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         ) : (
           <div className="gutter wide">
             <p className="measure text-lg text-muted-foreground">
